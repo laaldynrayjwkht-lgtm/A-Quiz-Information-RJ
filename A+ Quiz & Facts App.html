@@ -1,0 +1,2521 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>A+ Quiz & Facts | تطبيق A+ للأسئلة والمعلومات</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&family=Inter:wght@500;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <style>
+    /* ================= BASE & TYPOGRAPHY ================= */
+    :root {
+      --font-main: 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: var(--font-main);
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      min-height: 100vh;
+      background-color: #020617;
+      color: #ffffff;
+      transition: background 0.5s ease, color 0.35s ease;
+    }
+
+    /* ================= SPLASH ANIMATIONS ================= */
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 18px rgba(250, 204, 21, 0.65)); transform: scale(1); }
+      50% { filter: drop-shadow(0 0 38px rgba(250, 204, 21, 0.95)); transform: scale(1.04); }
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.25; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.25); }
+    }
+    @keyframes creatorFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    .splash-glow {
+      animation: pulseGlow 2.4s infinite ease-in-out;
+    }
+    .star-twinkle {
+      animation: twinkle 2s infinite ease-in-out;
+    }
+    .creator-badge-anim {
+      animation: creatorFloat 2.8s infinite ease-in-out;
+    }
+
+    /* ================= KIDS CARTOON THEME (<18) ================= */
+    .theme-kids {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 45%, #f472b6 100%) !important;
+      color: #1e1b4b !important;
+    }
+    @keyframes cartoonBounce {
+      0%, 100% { transform: translateY(0) scale(1, 1); }
+      35% { transform: translateY(-14px) scale(0.95, 1.06); }
+      65% { transform: translateY(0) scale(1.05, 0.94); }
+    }
+    @keyframes cartoonWobble {
+      0%, 100% { transform: rotate(-6deg); }
+      50% { transform: rotate(6deg); }
+    }
+    .kids-bounce {
+      animation: cartoonBounce 2.1s infinite ease-in-out;
+    }
+    .kids-wobble {
+      animation: cartoonWobble 2.6s infinite ease-in-out;
+    }
+    .kids-card {
+      background: rgba(255, 255, 255, 0.96);
+      color: #1e1b4b;
+      border: 4px solid #fde047;
+      box-shadow: 0 10px 0 #eab308, 0 20px 32px rgba(0, 0, 0, 0.18);
+      border-radius: 2rem;
+    }
+    .kids-btn {
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .kids-btn:active {
+      transform: translateY(4px) scale(0.97);
+    }
+
+    /* ================= ANIME ADULT THEME (18+) ================= */
+    .theme-anime {
+      background: radial-gradient(circle at 20% 20%, #1e1b4b 0%, #0f172a 55%, #090d16 100%) !important;
+      color: #f8fafc !important;
+    }
+    @keyframes animeAura {
+      0%, 100% { box-shadow: 0 0 22px rgba(244, 63, 94, 0.35), inset 0 0 18px rgba(99, 102, 241, 0.25); }
+      50% { box-shadow: 0 0 40px rgba(244, 63, 94, 0.65), inset 0 0 28px rgba(56, 189, 248, 0.35); }
+    }
+    @keyframes energySlash {
+      0% { stroke-dashoffset: 600; opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { stroke-dashoffset: 0; opacity: 0.2; }
+    }
+    @keyframes hairFlow {
+      0%, 100% { transform: skewX(0deg) translateY(0); }
+      50% { transform: skewX(-3deg) translateY(-3px); }
+    }
+    .anime-card {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.96));
+      color: #f8fafc;
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(244, 63, 94, 0.5);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 25px rgba(244, 63, 94, 0.15);
+      border-radius: 1.5rem;
+    }
+    .anime-aura {
+      animation: animeAura 3.5s infinite ease-in-out;
+    }
+    .anime-hair {
+      animation: hairFlow 3.2s infinite ease-in-out;
+      transform-origin: top center;
+    }
+    .anime-slash {
+      stroke-dasharray: 600;
+      animation: energySlash 4s infinite linear;
+    }
+
+    /* ================= GENERAL UI TRANSITIONS ================= */
+    .fade-slide-up {
+      animation: fadeSlideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(16px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes stagePop {
+      0% { transform: scale(0.7); opacity: 0; }
+      65% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .stage-pop {
+      animation: stagePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.4); border-radius: 999px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-white selection:bg-amber-400 selection:text-slate-950">
+
+  <!-- Background Animated Canvas Layer (Stars for <18, Sakura Petals for 18+) -->
+  <canvas id="bg-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+  <!-- ==================== 1. SPLASH SCREEN (A+ TO CRESCENT MORPH + CREATOR CREDIT) ==================== -->
+  <div id="splash-screen" onclick="dismissSplash()" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 transition-opacity duration-500 cursor-pointer select-none px-4">
+    <!-- Ambient Twinkling Stars -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="star-twinkle absolute top-1/4 left-1/4 w-2 h-2 bg-amber-300 rounded-full"></div>
+      <div class="star-twinkle absolute top-1/3 right-1/4 w-3 h-3 bg-cyan-300 rounded-full" style="animation-delay: 0.5s;"></div>
+      <div class="star-twinkle absolute bottom-1/3 left-1/3 w-2 h-2 bg-rose-400 rounded-full" style="animation-delay: 1s;"></div>
+      <div class="star-twinkle absolute top-1/5 right-1/3 w-1.5 h-1.5 bg-white rounded-full" style="animation-delay: 1.4s;"></div>
+    </div>
+
+    <!-- Morphing SVG Logo (A+ Company Logo -> Crescent Moon & Star) -->
+    <div class="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center splash-glow">
+      <svg id="morph-svg" viewBox="0 0 240 240" class="w-full h-full overflow-visible">
+        <defs>
+          <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fde047" />
+            <stop offset="50%" stop-color="#f59e0b" />
+            <stop offset="100%" stop-color="#ea580c" />
+          </linearGradient>
+          <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#38bdf8" />
+            <stop offset="100%" stop-color="#818cf8" />
+          </linearGradient>
+          <filter id="glowFilter" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+
+        <!-- Outer Aura Ring -->
+        <circle id="splash-ring" cx="120" cy="120" r="92" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-dasharray="14 8" opacity="0.5" />
+
+        <!-- Stage 1: A+ Company Logo -->
+        <g id="logo-aplus" style="transition: all 0.95s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: 120px 120px;">
+          <path d="M 92 162 L 62 162 L 96 74 L 116 74 L 150 162 L 120 162 L 114 143 L 98 143 Z M 106 105 L 101 124 L 111 124 Z" fill="url(#goldGrad)" filter="url(#glowFilter)" />
+          <path d="M 164 88 L 178 88 L 178 106 L 196 106 L 196 120 L 178 120 L 178 138 L 164 138 L 164 120 L 146 120 L 146 106 L 164 106 Z" fill="url(#cyanGrad)" filter="url(#glowFilter)" />
+        </g>
+
+        <!-- Stage 2: Crescent Moon & Star (هلال ونجمة) -->
+        <g id="logo-crescent" style="opacity: 0; transform: scale(0.35) rotate(-55deg); transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: 120px 120px;">
+          <path d="M 142 46 C 95 52, 62 93, 68 140 C 74 187, 117 217, 164 208 C 128 198, 105 164, 109 125 C 113 88, 139 59, 174 52 C 164 47, 153 45, 142 46 Z" fill="url(#goldGrad)" filter="url(#glowFilter)" />
+          <polygon points="168,84 173,97 187,97 176,105 180,118 168,110 156,118 160,105 149,97 163,97" fill="#fef08a" filter="url(#glowFilter)" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="mt-2 text-center">
+      <h1 class="text-3xl sm:text-4xl font-black tracking-wider bg-gradient-to-r from-amber-300 via-yellow-200 to-cyan-300 bg-clip-text text-transparent">
+        A+ STUDIO
+      </h1>
+      <p class="text-sm text-slate-300 mt-1 tracking-wide opacity-90">
+        Smart Knowledge & Trivia Universe
+      </p>
+
+      <!-- Creator Credit Badge -->
+      <div id="splash-creator-credit" class="creator-badge-anim mt-3 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/15 border border-amber-300/40 text-amber-200 text-xs sm:text-sm font-extrabold shadow-md">
+        <span>✨</span>
+        <span data-i18n="creatorCredit">من صنع علاء الدين الصياد</span>
+      </div>
+    </div>
+
+    <!-- Prominent Tap-to-Enter Button (Prevents any freeze) -->
+    <button type="button" onclick="event.stopPropagation(); dismissSplash();" class="mt-6 px-7 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black text-base shadow-xl shadow-amber-500/20 active:scale-95 transition-all flex items-center gap-2">
+      <span>ابدأ الآن • Start</span>
+      <span>🚀</span>
+    </button>
+  </div>
+
+  <!-- ==================== MAIN APP SHELL ==================== -->
+  <div id="app-shell" class="relative z-10 min-h-screen flex flex-col max-w-2xl mx-auto px-4 py-4 sm:py-6 hidden">
+    
+    <!-- Top Navigation Bar -->
+    <header id="top-bar" class="flex items-center justify-between gap-2 mb-5 px-3 py-2.5 rounded-2xl backdrop-blur-md bg-white/10 border border-white/15 shadow-lg">
+      <!-- Brand Crescent Mini Logo + Home Button -->
+      <button type="button" onclick="goHome()" class="flex items-center gap-2 text-start group focus:outline-none">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+          <svg viewBox="0 0 40 40" class="w-7 h-7">
+            <path d="M 24 6 C 15 7, 9 15, 10 24 C 11 33, 19 38, 28 36 C 21 34, 17 28, 18 20 C 19 13, 24 8, 30 7 C 28 6, 26 6, 24 6 Z" fill="#ffffff" />
+            <circle cx="28" cy="14" r="2.2" fill="#fef08a" />
+          </svg>
+        </div>
+        <div>
+          <span class="font-black text-base leading-none block tracking-tight">A+ Knowledge</span>
+          <span id="header-age-badge" class="text-[11px] font-bold opacity-85 block mt-0.5">---</span>
+        </div>
+      </button>
+
+      <!-- Right Controls: Sound Toggle + AI/Offline Status + Language Switcher -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <!-- Sound Mute/Unmute -->
+        <button type="button" id="sound-toggle-btn" onclick="toggleSound()" title="Toggle Sound" class="w-8 h-8 rounded-xl flex items-center justify-center text-sm bg-white/15 hover:bg-white/25 border border-white/20 transition-all">
+          🔊
+        </button>
+
+        <!-- Connection / AI Mode Pill -->
+        <button type="button" id="ai-status-btn" onclick="toggleForceOffline()" title="Switch AI / Offline Mode" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-emerald-500/20 border-emerald-400/40 text-emerald-200">
+          <span id="status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="status-text">AI</span>
+        </button>
+
+        <!-- Quick Language Button -->
+        <button type="button" onclick="showScreen('screen-language')" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-white/15 hover:bg-white/25 border border-white/20 transition-all">
+          <span id="current-lang-flag">🇸🇦</span>
+          <span id="current-lang-code">AR</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Dynamic Theme Mascot / Character Banner (<18 Cartoon vs 18+ Anime) -->
+    <div id="theme-visual-banner" class="hidden mb-4"></div>
+
+    <!-- ==================== SCREEN 1: LANGUAGE SELECTION ==================== -->
+    <section id="screen-language" class="fade-slide-up flex-1 flex flex-col justify-center py-2">
+      <div class="rounded-3xl p-6 sm:p-8 bg-slate-900/85 backdrop-blur-xl border border-white/15 shadow-2xl text-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
+          <svg viewBox="0 0 48 48" class="w-10 h-10">
+            <path d="M 29 7 C 18 8, 10 18, 12 29 C 13 40, 23 46, 34 44 C 25 41, 20 34, 21 24 C 22 16, 28 10, 36 8 C 34 7, 31 7, 29 7 Z" fill="#fff" />
+            <polygon points="34,15 35.5,19 39.5,19 36.2,21.5 37.5,25.5 34,23 30.5,25.5 31.8,21.5 28.5,19 32.5,19" fill="#fef08a" />
+          </svg>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-black text-white mb-1">اختر لغتك • Choose Language</h2>
+        <p class="text-slate-300 text-sm mb-2">Select your preferred language to personalize the experience</p>
+        <p class="text-xs font-bold text-amber-300/90 mb-6" data-i18n="creatorCredit">من صنع علاء الدين الصياد</p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <button type="button" onclick="selectLanguage('ar')" class="lang-card p-4 rounded-2xl bg-white/10 hover:bg-amber-400 hover:text-slate-950 border border-white/15 transition-all flex flex-col items-center gap-1.5">
+            <span class="text-3xl">🇸🇦</span>
+            <span class="font-extrabold text-base">العربية</span>
+            <span class="text-xs opacity-75">Arabic</span>
+          </button>
+
+          <button type="button" onclick="selectLanguage('en')" class="lang-card p-4 rounded-2xl bg-white/10 hover:bg-amber-400 hover:text-slate-950 border border-white/15 transition-all flex flex-col items-center gap-1.5">
+            <span class="text-3xl">🇬🇧</span>
+            <span class="font-extrabold text-base">English</span>
+            <span class="text-xs opacity-75">الإنجليزية</span>
+          </button>
+
+          <button type="button" onclick="selectLanguage('zh')" class="lang-card p-4 rounded-2xl bg-white/10 hover:bg-amber-400 hover:text-slate-950 border border-white/15 transition-all flex flex-col items-center gap-1.5">
+            <span class="text-3xl">🇨🇳</span>
+            <span class="font-extrabold text-base">中文</span>
+            <span class="text-xs opacity-75">Chinese</span>
+          </button>
+
+          <button type="button" onclick="selectLanguage('ja')" class="lang-card p-4 rounded-2xl bg-white/10 hover:bg-amber-400 hover:text-slate-950 border border-white/15 transition-all flex flex-col items-center gap-1.5">
+            <span class="text-3xl">🇯🇵</span>
+            <span class="font-extrabold text-base">日本語</span>
+            <span class="text-xs opacity-75">Japanese</span>
+          </button>
+
+          <button type="button" onclick="selectLanguage('tr')" class="lang-card p-4 rounded-2xl bg-white/10 hover:bg-amber-400 hover:text-slate-950 border border-white/15 transition-all flex flex-col items-center gap-1.5">
+            <span class="text-3xl">🇹🇷</span>
+            <span class="font-extrabold text-base">Türkçe</span>
+            <span class="text-xs opacity-75">Turkish</span>
+          </button>
+
+          <button type="button" onclick="selectLanguage('es')" class="lang-card p-4 rounded-2xl bg-white/10 hover:bg-amber-400 hover:text-slate-950 border border-white/15 transition-all flex flex-col items-center gap-1.5">
+            <span class="text-3xl">🇪🇸</span>
+            <span class="font-extrabold text-base">Español</span>
+            <span class="text-xs opacity-75">Spanish</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 2: AGE SELECTION ==================== -->
+    <section id="screen-age" class="hidden fade-slide-up flex-1 flex flex-col justify-center py-2">
+      <div class="rounded-3xl p-6 sm:p-8 bg-slate-900/85 backdrop-blur-xl border border-white/15 shadow-2xl">
+        <div class="text-center mb-6">
+          <span class="inline-block px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold mb-2" data-i18n="step2Badge">الخطوة 2 • تحديد الفئة العمرية</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white" data-i18n="ageTitle">كم عمرك؟</h2>
+          <p class="text-slate-300 text-sm mt-1.5" data-i18n="ageSubtitle">نُخصص الأسئلة والمعلومات والرسوم المتحركة لتناسب عمرك تماماً</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <!-- Under 18 Card (Kids Cartoon Preview) -->
+          <button type="button" onclick="selectAgeGroup('kids')" class="relative overflow-hidden rounded-3xl p-5 text-start bg-gradient-to-br from-sky-400 via-indigo-400 to-pink-400 text-slate-950 border-4 border-yellow-300 shadow-xl hover:scale-[1.02] active:scale-95 transition-all">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-full bg-white/90 text-indigo-900 font-black text-xs shadow">🎈 KIDS & TEENS</span>
+              <svg viewBox="0 0 60 60" class="w-14 h-14 kids-bounce">
+                <circle cx="30" cy="30" r="24" fill="#fde047" stroke="#f59e0b" stroke-width="3"/>
+                <circle cx="22" cy="25" r="3.5" fill="#1e1b4b"/>
+                <circle cx="38" cy="25" r="3.5" fill="#1e1b4b"/>
+                <circle cx="23" cy="24" r="1.2" fill="#fff"/>
+                <circle cx="39" cy="24" r="1.2" fill="#fff"/>
+                <path d="M 21 35 Q 30 44 39 35" fill="none" stroke="#1e1b4b" stroke-width="3.5" stroke-linecap="round"/>
+                <ellipse cx="16" cy="31" rx="3" ry="2" fill="#fb7185" opacity="0.75"/>
+                <ellipse cx="44" cy="31" rx="3" ry="2" fill="#fb7185" opacity="0.75"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-black text-white drop-shadow" data-i18n="under18Title">أقل من 18 سنة</h3>
+            <p class="text-xs sm:text-sm font-bold text-slate-900/90 mt-1" data-i18n="under18Desc">رسوم كرتونية مرحة وممتعة، وأسئلة ومعلومات شيّقة ومبسّطة للصغار والشباب!</p>
+          </button>
+
+          <!-- 18+ Card (Detailed Anime Preview) -->
+          <button type="button" onclick="selectAgeGroup('adults')" class="relative overflow-hidden rounded-3xl p-5 text-start bg-gradient-to-br from-slate-900 via-indigo-950 to-rose-950 text-white border-2 border-rose-500/60 shadow-xl hover:scale-[1.02] active:scale-95 transition-all anime-aura">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-full bg-rose-500/25 border border-rose-400/50 text-rose-200 font-black text-xs">⚔️ 18+ ANIME EDITION</span>
+              <svg viewBox="0 0 60 60" class="w-14 h-14">
+                <defs>
+                  <linearGradient id="animeEye" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#f43f5e"/>
+                    <stop offset="100%" stop-color="#38bdf8"/>
+                  </linearGradient>
+                </defs>
+                <polygon points="30,4 54,30 30,56 6,30" fill="none" stroke="url(#animeEye)" stroke-width="2.5"/>
+                <circle cx="30" cy="30" r="14" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5"/>
+                <ellipse cx="30" cy="30" rx="5" ry="11" fill="url(#animeEye)"/>
+                <circle cx="32" cy="26" r="2.5" fill="#fff"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-black text-amber-300" data-i18n="over18Title">18 سنة فما فوق</h3>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1" data-i18n="over18Desc">رسوم أنمي غنية بالتفاصيل والمؤثرات البصرية، مع أسئلة ومعلومات عميقة ومتقدمة للكبار!</p>
+          </button>
+        </div>
+
+        <!-- Exact Age Input Option -->
+        <div class="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center gap-3">
+          <label for="exact-age-input" class="text-xs font-bold text-slate-300 whitespace-nowrap" data-i18n="exactAgeLabel">أو أدخل عمرك بالضبط:</label>
+          <div class="flex w-full gap-2">
+            <input id="exact-age-input" type="number" min="4" max="110" placeholder="15 / 24" class="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 text-center font-bold" />
+            <button type="button" onclick="applyExactAge()" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm transition-all whitespace-nowrap" data-i18n="confirmBtn">تأكيد</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 3: MODE SELECTION (QUIZ vs FACTS) ==================== -->
+    <section id="screen-mode" class="hidden fade-slide-up flex-1 flex flex-col justify-center py-2">
+      <div id="mode-container" class="p-6 sm:p-8 transition-all">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl sm:text-3xl font-black" data-i18n="chooseModeTitle">ماذا تفضل اليوم؟</h2>
+          <p class="text-sm opacity-80 mt-1.5" data-i18n="chooseModeSubtitle">اختر بين تحدي الأسئلة أو استكشاف المعلومات الشيّقة</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <!-- Quiz Mode Card -->
+          <button type="button" id="btn-mode-quiz" onclick="selectMode('quiz')" class="p-6 rounded-3xl text-start bg-gradient-to-br from-amber-300 to-yellow-400 text-indigo-950 border-4 border-amber-500 shadow-lg flex flex-col justify-between min-h-[175px] transition-all hover:scale-[1.02] active:scale-95">
+            <div class="flex items-center justify-between w-full mb-3">
+              <span class="text-4xl">❓</span>
+              <span class="px-3 py-1 rounded-full bg-black/15 text-xs font-black">QUIZ</span>
+            </div>
+            <div>
+              <h3 class="text-xl sm:text-2xl font-black mb-1" data-i18n="quizModeTitle">أسئلة وتحدي</h3>
+              <p class="text-xs sm:text-sm opacity-85 font-semibold leading-relaxed" data-i18n="quizModeDesc">اختبر معلوماتك مع أسئلة ذكية متعددة الخيارات ونقاط وتصحيح فوري</p>
+            </div>
+          </button>
+
+          <!-- Facts Mode Card -->
+          <button type="button" id="btn-mode-facts" onclick="selectMode('facts')" class="p-6 rounded-3xl text-start bg-gradient-to-br from-sky-300 to-cyan-400 text-indigo-950 border-4 border-sky-500 shadow-lg flex flex-col justify-between min-h-[175px] transition-all hover:scale-[1.02] active:scale-95">
+            <div class="flex items-center justify-between w-full mb-3">
+              <span class="text-4xl">💡</span>
+              <span class="px-3 py-1 rounded-full bg-black/15 text-xs font-black">FACTS</span>
+            </div>
+            <div>
+              <h3 class="text-xl sm:text-2xl font-black mb-1" data-i18n="factsModeTitle">معلومات وحقائق</h3>
+              <p class="text-xs sm:text-sm opacity-85 font-semibold leading-relaxed" data-i18n="factsModeDesc">اكتشف حقائق مذهلة ومعلومات قيّمة مصممة خصيصاً لفئتك العمرية</p>
+            </div>
+          </button>
+        </div>
+
+        <div class="text-center">
+          <button type="button" onclick="showScreen('screen-age')" class="px-4 py-2 rounded-xl bg-black/15 hover:bg-black/25 text-xs font-bold inline-flex items-center gap-1.5 transition-all">
+            <span>🔄</span> <span data-i18n="changeAgeBtn">تغيير الفئة العمرية</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 4: DIFFICULTY STAGES & CATEGORIES ==================== -->
+    <section id="screen-category" class="hidden fade-slide-up flex-1 flex flex-col justify-center py-2">
+      <div id="category-container" class="p-6 sm:p-8 transition-all">
+        <div class="flex items-center justify-between mb-4">
+          <button type="button" onclick="showScreen('screen-mode')" class="px-3 py-1.5 rounded-xl bg-black/15 hover:bg-black/25 text-xs font-bold flex items-center gap-1">
+            <span>←</span> <span data-i18n="backBtn">رجوع</span>
+          </button>
+          <span id="selected-mode-pill" class="px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950">---</span>
+        </div>
+
+        <!-- Difficulty / Stage Selector (من السهل للصعب) -->
+        <div class="mb-6 p-4 rounded-2xl bg-black/15 border border-white/15">
+          <div class="flex items-center justify-between mb-2.5">
+            <span class="text-xs sm:text-sm font-black flex items-center gap-1.5">
+              <span>🎯</span> <span data-i18n="diffSelectTitle">اختر المرحلة / مستوى الصعوبة:</span>
+            </span>
+            <span id="diff-multiplier-badge" class="text-[11px] font-black px-2.5 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 border border-emerald-400/40">1x ➔ 3x ⭐</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button type="button" id="diff-btn-progressive" onclick="selectDifficulty('progressive')" class="diff-pill p-2.5 rounded-xl border-2 text-center transition-all font-extrabold text-xs flex flex-col items-center gap-1">
+              <span class="text-base">📈</span>
+              <span data-i18n="diffProgressive">تدرج تلقائي</span>
+              <span class="text-[10px] opacity-75" data-i18n="diffProgSub">سهل ➔ صعب</span>
+            </button>
+
+            <button type="button" id="diff-btn-easy" onclick="selectDifficulty('easy')" class="diff-pill p-2.5 rounded-xl border-2 text-center transition-all font-extrabold text-xs flex flex-col items-center gap-1">
+              <span class="text-base">🌱</span>
+              <span data-i18n="diffEasy">المرحلة 1: سهل</span>
+              <span class="text-[10px] text-emerald-400 font-black">1x Points</span>
+            </button>
+
+            <button type="button" id="diff-btn-medium" onclick="selectDifficulty('medium')" class="diff-pill p-2.5 rounded-xl border-2 text-center transition-all font-extrabold text-xs flex flex-col items-center gap-1">
+              <span class="text-base">⚡</span>
+              <span data-i18n="diffMedium">المرحلة 2: متوسط</span>
+              <span class="text-[10px] text-amber-400 font-black">2x Points</span>
+            </button>
+
+            <button type="button" id="diff-btn-hard" onclick="selectDifficulty('hard')" class="diff-pill p-2.5 rounded-xl border-2 text-center transition-all font-extrabold text-xs flex flex-col items-center gap-1">
+              <span class="text-base">🔥</span>
+              <span data-i18n="diffHard">المرحلة 3: صعب</span>
+              <span class="text-[10px] text-rose-400 font-black">3x Points</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="text-center mb-5">
+          <h2 class="text-2xl sm:text-3xl font-black" data-i18n="chooseCatTitle">اختر المجال المفضل</h2>
+          <p class="text-sm opacity-80 mt-1" data-i18n="chooseCatSubtitle">حدد القسم الذي ترغب به أو اختر العشوائي للتنويع</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <button type="button" onclick="startSession('religion')" class="cat-btn p-4 rounded-2xl border-2 flex items-center gap-4 text-start transition-all hover:scale-[1.02] active:scale-95">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-2xl shrink-0">🕌</div>
+            <div>
+              <h3 class="font-black text-base" data-i18n="catReligion">أمور دينية</h3>
+              <p class="text-xs opacity-75" data-i18n="catReligionSub">قيم، سيرة، وقصص دينية</p>
+            </div>
+          </button>
+
+          <button type="button" onclick="startSession('football')" class="cat-btn p-4 rounded-2xl border-2 flex items-center gap-4 text-start transition-all hover:scale-[1.02] active:scale-95">
+            <div class="w-12 h-12 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-2xl shrink-0">⚽</div>
+            <div>
+              <h3 class="font-black text-base" data-i18n="catFootball">كرة القدم</h3>
+              <p class="text-xs opacity-75" data-i18n="catFootballSub">بطولات، أساطير، وقوانين اللعبة</p>
+            </div>
+          </button>
+
+          <button type="button" onclick="startSession('animals')" class="cat-btn p-4 rounded-2xl border-2 flex items-center gap-4 text-start transition-all hover:scale-[1.02] active:scale-95">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-2xl shrink-0">🦁</div>
+            <div>
+              <h3 class="font-black text-base" data-i18n="catAnimals">عالم الحيوانات</h3>
+              <p class="text-xs opacity-75" data-i18n="catAnimalsSub">أسرار الطبيعة والكائنات المدهشة</p>
+            </div>
+          </button>
+
+          <button type="button" onclick="startSession('general')" class="cat-btn p-4 rounded-2xl border-2 flex items-center gap-4 text-start transition-all hover:scale-[1.02] active:scale-95">
+            <div class="w-12 h-12 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-2xl shrink-0">🌍</div>
+            <div>
+              <h3 class="font-black text-base" data-i18n="catGeneral">ثقافة وعلوم</h3>
+              <p class="text-xs opacity-75" data-i18n="catGeneralSub">فضاء، تاريخ، واكتشافات</p>
+            </div>
+          </button>
+
+          <button type="button" onclick="startSession('random')" class="cat-btn sm:col-span-2 p-4 rounded-2xl border-2 border-amber-400/70 bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-indigo-500/20 flex items-center justify-between gap-4 text-start transition-all hover:scale-[1.02] active:scale-95">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center text-2xl shrink-0 shadow">🎲</div>
+              <div>
+                <h3 class="font-black text-base" data-i18n="catRandom">عشوائي (شامل كل الأقسام)</h3>
+                <p class="text-xs opacity-85" data-i18n="catRandomSub">مزيج متجدد من الدين، كرة القدم، الحيوانات، والثقافة العامة</p>
+              </div>
+            </div>
+            <span class="text-xl font-black">✨</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 5: ACTIVE QUIZ ENGINE ==================== -->
+    <section id="screen-quiz" class="hidden fade-slide-up flex-1 flex flex-col justify-between py-1">
+      <div id="quiz-card-wrapper" class="p-5 sm:p-7 transition-all">
+        <!-- Quiz Top Stats -->
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <button type="button" onclick="showScreen('screen-category')" class="px-3 py-1.5 rounded-xl bg-black/15 hover:bg-black/25 text-xs font-bold">
+            ← <span data-i18n="categoriesBtn">الأقسام</span>
+          </button>
+
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <span id="quiz-cat-badge" class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-indigo-500/25 border border-indigo-400/40">---</span>
+            <span class="px-2.5 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950">
+              ⭐ <span id="quiz-score">0</span>
+            </span>
+            <span class="px-2.5 py-1 rounded-full text-xs font-black bg-rose-500 text-white">
+              🔥 <span id="quiz-streak">0</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Stage Progression Bar (سهل -> متوسط -> صعب) -->
+        <div id="quiz-stage-bar" class="mb-4 p-3 rounded-2xl bg-black/15 border border-white/15">
+          <div class="flex items-center justify-between text-xs font-black mb-2">
+            <span id="quiz-stage-label" class="flex items-center gap-1.5">🌱 المرحلة 1: سهل</span>
+            <span id="quiz-stage-progress-text" class="opacity-80">0 / 3</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div id="q-step-1" class="h-2.5 rounded-full bg-emerald-400 transition-all"></div>
+            <div id="q-step-2" class="h-2.5 rounded-full bg-white/15 transition-all"></div>
+            <div id="q-step-3" class="h-2.5 rounded-full bg-white/15 transition-all"></div>
+          </div>
+          <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/10">
+            <button type="button" onclick="jumpToStage('easy')" id="q-jump-easy" class="flex-1 py-1 rounded-lg text-[11px] font-bold transition-all">🌱 <span data-i18n="shortEasy">سهل</span></button>
+            <button type="button" onclick="jumpToStage('medium')" id="q-jump-medium" class="flex-1 py-1 rounded-lg text-[11px] font-bold transition-all">⚡ <span data-i18n="shortMedium">متوسط</span></button>
+            <button type="button" onclick="jumpToStage('hard')" id="q-jump-hard" class="flex-1 py-1 rounded-lg text-[11px] font-bold transition-all">🔥 <span data-i18n="shortHard">صعب</span></button>
+          </div>
+        </div>
+
+        <!-- Stage Up Celebration Banner -->
+        <div id="quiz-stage-up-banner" class="hidden mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-slate-950 font-black text-center text-sm shadow-lg stage-pop">
+          🎊 <span id="quiz-stage-up-text">تمت الترقية للمرحلة التالية!</span>
+        </div>
+
+        <!-- Loading Spinner for AI Generation -->
+        <div id="quiz-loader" class="hidden py-14 flex flex-col items-center justify-center text-center">
+          <div class="w-14 h-14 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p class="font-bold text-base" data-i18n="generatingAI">الذكاء الاصطناعي يُحضّر لك سؤالاً مخصصاً...</p>
+          <p class="text-xs opacity-70 mt-1" data-i18n="aiTailoredNote">مُعاير بدقة حسب عمرك ومستوى المرحلة</p>
+        </div>
+
+        <!-- Question Content -->
+        <div id="quiz-content">
+          <div class="mb-5">
+            <span id="quiz-source-tag" class="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-white/15 mb-2">AI Gemini</span>
+            <h3 id="quiz-question-text" class="text-xl sm:text-2xl font-black leading-relaxed">...</h3>
+          </div>
+
+          <div id="quiz-options" class="space-y-3"></div>
+
+          <div id="quiz-feedback" class="hidden mt-5 p-4 rounded-2xl border-2 transition-all">
+            <div class="flex items-center gap-2 font-black text-base mb-1" id="quiz-feedback-title"></div>
+            <p class="text-xs sm:text-sm leading-relaxed opacity-90" id="quiz-feedback-exp"></p>
+          </div>
+
+          <div class="mt-6 flex justify-end">
+            <button type="button" id="next-question-btn" onclick="loadNextQuestion()" class="hidden w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-black text-base shadow-lg transition-all">
+              <span data-i18n="nextQuestionBtn">السؤال التالي</span> ➔
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 6: ACTIVE FACTS / INFORMATION ENGINE ==================== -->
+    <section id="screen-facts" class="hidden fade-slide-up flex-1 flex flex-col justify-between py-1">
+      <div id="facts-card-wrapper" class="p-5 sm:p-7 transition-all">
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <button type="button" onclick="showScreen('screen-category')" class="px-3 py-1.5 rounded-xl bg-black/15 hover:bg-black/25 text-xs font-bold">
+            ← <span data-i18n="categoriesBtn">الأقسام</span>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <span id="facts-cat-badge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-cyan-500/25 border border-cyan-400/40">---</span>
+            <span class="px-3 py-1 rounded-full text-xs font-black bg-emerald-400 text-slate-950">
+              📖 #<span id="facts-counter">1</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Facts Stage Progression Bar -->
+        <div id="facts-stage-bar" class="mb-4 p-3 rounded-2xl bg-black/15 border border-white/15">
+          <div class="flex items-center justify-between text-xs font-black mb-2">
+            <span id="facts-stage-label" class="flex items-center gap-1.5">🌱 المرحلة 1: سهل</span>
+            <span id="facts-stage-progress-text" class="opacity-80">0 / 3</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div id="f-step-1" class="h-2.5 rounded-full bg-emerald-400 transition-all"></div>
+            <div id="f-step-2" class="h-2.5 rounded-full bg-white/15 transition-all"></div>
+            <div id="f-step-3" class="h-2.5 rounded-full bg-white/15 transition-all"></div>
+          </div>
+          <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-white/10">
+            <button type="button" onclick="jumpToStage('easy')" id="f-jump-easy" class="flex-1 py-1 rounded-lg text-[11px] font-bold transition-all">🌱 <span data-i18n="shortEasy">سهل</span></button>
+            <button type="button" onclick="jumpToStage('medium')" id="f-jump-medium" class="flex-1 py-1 rounded-lg text-[11px] font-bold transition-all">⚡ <span data-i18n="shortMedium">متوسط</span></button>
+            <button type="button" onclick="jumpToStage('hard')" id="f-jump-hard" class="flex-1 py-1 rounded-lg text-[11px] font-bold transition-all">🔥 <span data-i18n="shortHard">صعب</span></button>
+          </div>
+        </div>
+
+        <!-- Facts Stage Up Celebration Banner -->
+        <div id="facts-stage-up-banner" class="hidden mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-500 text-white font-black text-center text-sm shadow-lg stage-pop">
+          🚀 <span id="facts-stage-up-text">انتقلت إلى مستوى معلومات أعمق!</span>
+        </div>
+
+        <!-- Loader -->
+        <div id="facts-loader" class="hidden py-14 flex flex-col items-center justify-center text-center">
+          <div class="w-14 h-14 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p class="font-bold text-base" data-i18n="generatingFactAI">الذكاء الاصطناعي يستخرج معلومة مذهلة لك...</p>
+        </div>
+
+        <!-- Fact Display -->
+        <div id="facts-content">
+          <div class="flex items-center gap-3 mb-4">
+            <div id="fact-emoji-box" class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white flex items-center justify-center text-3xl shadow-lg shrink-0">
+              ✨
+            </div>
+            <div>
+              <span id="fact-source-tag" class="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-white/15 mb-1">AI Gemini</span>
+              <h3 id="fact-title" class="text-xl sm:text-2xl font-black leading-snug">...</h3>
+            </div>
+          </div>
+
+          <div class="p-4 sm:p-5 rounded-2xl bg-black/15 border border-white/10 mb-4">
+            <p id="fact-body" class="text-base sm:text-lg leading-relaxed font-medium"></p>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-amber-400/15 border border-amber-400/35 flex items-start gap-2.5">
+            <span class="text-xl">💡</span>
+            <p id="fact-bonus" class="text-xs sm:text-sm font-semibold opacity-95"></p>
+          </div>
+
+          <div class="mt-6">
+            <button type="button" onclick="loadNextFact()" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-cyan-400 to-indigo-500 hover:from-cyan-300 hover:to-indigo-400 text-slate-950 font-black text-base shadow-lg transition-all">
+              <span data-i18n="nextFactBtn">معلومة جديدة</span> ✨
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. STATE MANAGEMENT & CONFIGURATION
+    // =========================================================================
+    const apiKey = "";
+    const state = {
+      lang: 'ar',
+      ageGroup: null, // 'kids' (<18) or 'adults' (18+)
+      exactAge: null,
+      mode: null,     // 'quiz' or 'facts'
+      category: null, // 'religion', 'football', 'animals', 'general', 'random'
+      difficultyMode: 'progressive', // 'progressive', 'easy', 'medium', 'hard'
+      currentDifficulty: 'easy',     // 'easy', 'medium', 'hard'
+      stageProgress: 0,              // 0..3 within current stage
+      score: 0,
+      streak: 0,
+      factCount: 0,
+      forceOffline: false,
+      soundEnabled: true,
+      splashDismissed: false,
+      usedOfflineIds: new Set(),
+      currentQuestion: null,
+      answered: false
+    };
+
+    // =========================================================================
+    // 2. COMPLETE 6-LANGUAGE UI TRANSLATIONS (AR, EN, ZH, JA, TR, ES)
+    // =========================================================================
+    const I18N = {
+      ar: {
+        dir: 'rtl', flag: '🇸🇦', code: 'AR', name: 'العربية',
+        creatorCredit: 'من صنع علاء الدين الصياد',
+        step2Badge: 'الخطوة 2 • تحديد الفئة العمرية',
+        ageTitle: 'كم عمرك؟',
+        ageSubtitle: 'نُخصص الأسئلة والمعلومات والرسوم المتحركة لتناسب عمرك تماماً',
+        under18Title: 'أقل من 18 سنة',
+        under18Desc: 'رسوم كرتونية مرحة وممتعة، وأسئلة ومعلومات شيّقة ومبسّطة للصغار والشباب!',
+        over18Title: '18 سنة فما فوق',
+        over18Desc: 'رسوم أنمي غنية بالتفاصيل والمؤثرات البصرية، مع أسئلة ومعلومات عميقة ومتقدمة للكبار!',
+        exactAgeLabel: 'أو أدخل عمرك بالضبط:',
+        confirmBtn: 'تأكيد',
+        badgeKids: '🎈 وضع الصغار والشباب (<18)',
+        badgeAdults: '⚔️ وضع الكبار والأنمي (18+)',
+        chooseModeTitle: 'ماذا تفضل اليوم؟',
+        chooseModeSubtitle: 'اختر بين تحدي الأسئلة أو استكشاف المعلومات الشيّقة',
+        quizModeTitle: 'أسئلة وتحدي',
+        quizModeDesc: 'اختبر معلوماتك مع أسئلة ذكية متعددة الخيارات ونقاط وتصحيح فوري',
+        factsModeTitle: 'معلومات وحقائق',
+        factsModeDesc: 'اكتشف حقائق مذهلة ومعلومات قيّمة مصممة خصيصاً لفئتك العمرية',
+        changeAgeBtn: 'تغيير الفئة العمرية',
+        backBtn: 'رجوع',
+        diffSelectTitle: 'اختر المرحلة / مستوى الصعوبة:',
+        diffProgressive: 'تدرج تلقائي',
+        diffProgSub: 'سهل ➔ صعب',
+        diffEasy: 'المرحلة 1: سهل',
+        diffMedium: 'المرحلة 2: متوسط',
+        diffHard: 'المرحلة 3: صعب',
+        shortEasy: 'سهل',
+        shortMedium: 'متوسط',
+        shortHard: 'صعب',
+        stageUpMsg: 'مبروك! انتقلت إلى',
+        chooseCatTitle: 'اختر المجال المفضل',
+        chooseCatSubtitle: 'حدد القسم الذي ترغب به أو اختر العشوائي للتنويع',
+        catReligion: 'أمور دينية',
+        catReligionSub: 'قيم، سيرة، وقصص دينية',
+        catFootball: 'كرة القدم',
+        catFootballSub: 'بطولات، أساطير، وقوانين اللعبة',
+        catAnimals: 'عالم الحيوانات',
+        catAnimalsSub: 'أسرار الطبيعة والكائنات المدهشة',
+        catGeneral: 'ثقافة وعلوم',
+        catGeneralSub: 'فضاء، تاريخ، واكتشافات',
+        catRandom: 'عشوائي (شامل كل الأقسام)',
+        catRandomSub: 'مزيج متجدد من الدين، كرة القدم، الحيوانات، والثقافة العامة',
+        categoriesBtn: 'الأقسام',
+        generatingAI: 'الذكاء الاصطناعي يُحضّر لك سؤالاً مخصصاً...',
+        aiTailoredNote: 'مُعاير بدقة حسب عمرك ومستوى المرحلة',
+        generatingFactAI: 'الذكاء الاصطناعي يستخرج معلومة مذهلة لك...',
+        nextQuestionBtn: 'السؤال التالي',
+        nextFactBtn: 'معلومة جديدة',
+        correctTitle: '🎉 إجابة صحيحة! أحسنت!',
+        wrongTitle: '💡 إجابة غير صحيحة، إليك التوضيح:',
+        statusAI: 'AI متصل',
+        statusOffline: 'بدون إنترنت'
+      },
+      en: {
+        dir: 'ltr', flag: '🇬🇧', code: 'EN', name: 'English',
+        creatorCredit: 'من صنع علاء الدين الصياد • Created by Alaa Al-Sayyad',
+        step2Badge: 'Step 2 • Age Calibration',
+        ageTitle: 'How old are you?',
+        ageSubtitle: 'We tailor questions, facts, and animations specifically to your age group',
+        under18Title: 'Under 18',
+        under18Desc: 'Playful, colorful cartoon animations with fun, engaging questions & facts for kids and youth!',
+        over18Title: '18 & Over',
+        over18Desc: 'Detailed anime-inspired visuals & effects with deep, challenging questions & facts for adults!',
+        exactAgeLabel: 'Or enter your exact age:',
+        confirmBtn: 'Confirm',
+        badgeKids: '🎈 Kids & Youth Mode (<18)',
+        badgeAdults: '⚔️ Adults Anime Mode (18+)',
+        chooseModeTitle: 'What would you like today?',
+        chooseModeSubtitle: 'Choose between a trivia quiz challenge or fascinating knowledge cards',
+        quizModeTitle: 'Quiz Challenge',
+        quizModeDesc: 'Test your knowledge with smart multiple-choice questions, streaks & explanations',
+        factsModeTitle: 'Facts & Info',
+        factsModeDesc: 'Discover mind-blowing facts and insights tailored for your age group',
+        changeAgeBtn: 'Change Age Group',
+        backBtn: 'Back',
+        diffSelectTitle: 'Choose Stage / Difficulty Level:',
+        diffProgressive: 'Auto-Progress',
+        diffProgSub: 'Easy ➔ Hard',
+        diffEasy: 'Stage 1: Easy',
+        diffMedium: 'Stage 2: Medium',
+        diffHard: 'Stage 3: Hard',
+        shortEasy: 'Easy',
+        shortMedium: 'Medium',
+        shortHard: 'Hard',
+        stageUpMsg: 'Level Up! Advanced to',
+        chooseCatTitle: 'Choose a Category',
+        chooseCatSubtitle: 'Pick a specific topic or choose Random for a dynamic mix',
+        catReligion: 'Religious Knowledge',
+        catReligionSub: 'Values, history, and spiritual stories',
+        catFootball: 'Football / Soccer',
+        catFootballSub: 'World Cups, legends, and rules',
+        catAnimals: 'Animal Kingdom',
+        catAnimalsSub: 'Wildlife secrets and amazing creatures',
+        catGeneral: 'General Knowledge',
+        catGeneralSub: 'Space, science, history & discoveries',
+        catRandom: 'Random Mix (All Topics)',
+        catRandomSub: 'A thrilling blend of Religion, Football, Animals, and Science',
+        categoriesBtn: 'Categories',
+        generatingAI: 'AI is crafting a custom question for you...',
+        aiTailoredNote: 'Calibrated for your age & stage level',
+        generatingFactAI: 'AI is curating a fascinating fact for you...',
+        nextQuestionBtn: 'Next Question',
+        nextFactBtn: 'Next Fact',
+        correctTitle: '🎉 Correct! Awesome job!',
+        wrongTitle: '💡 Not quite! Here is why:',
+        statusAI: 'AI Online',
+        statusOffline: 'Offline Mode'
+      },
+      zh: {
+        dir: 'ltr', flag: '🇨🇳', code: 'ZH', name: '中文',
+        creatorCredit: 'من صنع علاء الدين الصياد • 由 Alaa Al-Sayyad 制作',
+        step2Badge: '第 2 步 • 年龄段定制',
+        ageTitle: '您的年龄是？',
+        ageSubtitle: '我们会根据您的年龄量身定制问题、百科知识和专属动画风格',
+        under18Title: '18岁以下',
+        under18Desc: '趣味可爱的卡通动画，为青少年和儿童准备的轻松有趣问答与百科！',
+        over18Title: '18岁及以上',
+        over18Desc: '精致细腻的动漫视觉特效，为成年人打造的深度烧脑问答与百科！',
+        exactAgeLabel: '或输入您的具体年龄：',
+        confirmBtn: '确认',
+        badgeKids: '🎈 青少年卡通模式 (<18)',
+        badgeAdults: '⚔️ 成人动漫模式 (18+)',
+        chooseModeTitle: '今天想体验什么？',
+        chooseModeSubtitle: '选择趣味知识问答挑战，或浏览精彩百科卡片',
+        quizModeTitle: '趣味问答',
+        quizModeDesc: '智能选择题挑战，实时积分、连胜纪录与详细解析',
+        factsModeTitle: '百科知识',
+        factsModeDesc: '探索专为您的年龄段精选的惊人冷知识与科学奥秘',
+        changeAgeBtn: '更改年龄段',
+        backBtn: '返回',
+        diffSelectTitle: '选择关卡难度（由易到难）：',
+        diffProgressive: '自动进阶',
+        diffProgSub: '简单 ➔ 困难',
+        diffEasy: '第一关：简单',
+        diffMedium: '第二关：中等',
+        diffHard: '第三关：困难',
+        shortEasy: '简单',
+        shortMedium: '中等',
+        shortHard: '困难',
+        stageUpMsg: '恭喜晋级！进入',
+        chooseCatTitle: '选择感兴趣的领域',
+        chooseCatSubtitle: '选择一个专属分类，或选择“随机”混合挑战',
+        catReligion: '宗教与文化',
+        catReligionSub: '美德、历史与精神智慧',
+        catFootball: '足球世界',
+        catFootballSub: '世界杯、传奇球星与赛事规则',
+        catAnimals: '动物王国',
+        catAnimalsSub: '野生动物奥秘与神奇生物',
+        catGeneral: '综合百科',
+        catGeneralSub: '宇宙、科学、历史与发现',
+        catRandom: '随机混合（全部分类）',
+        catRandomSub: '融合宗教、足球、动物与综合百科的精彩体验',
+        categoriesBtn: '分类',
+        generatingAI: 'AI 正在为您量身生成问题...',
+        aiTailoredNote: '已根据您的年龄与当前关卡精准校准',
+        generatingFactAI: 'AI 正在为您精选一条精彩百科...',
+        nextQuestionBtn: '下一题',
+        nextFactBtn: '下一条百科',
+        correctTitle: '🎉 回答正确！太棒了！',
+        wrongTitle: '💡 回答错误，来看看解析：',
+        statusAI: 'AI 在线',
+        statusOffline: '离线模式'
+      },
+      ja: {
+        dir: 'ltr', flag: '🇯🇵', code: 'JA', name: '日本語',
+        creatorCredit: 'من صنع علاء الدين الصياد • 制作：Alaa Al-Sayyad',
+        step2Badge: 'ステップ 2 • 年齢設定',
+        ageTitle: 'あなたの年齢は？',
+        ageSubtitle: '年齢に合わせて問題・豆知識・アニメーションを最適化します',
+        under18Title: '18歳未満',
+        under18Desc: 'ポップで楽しいカートゥーン演出！子どもや学生向けの楽しいクイズと豆知識。',
+        over18Title: '18歳以上',
+        over18Desc: '精巧なアニメ風ビジュアル＆エフェクト！大人向けの本格クイズと深い知識。',
+        exactAgeLabel: 'または正確な年齢を入力：',
+        confirmBtn: '決定',
+        badgeKids: '🎈 キッズ＆ユース (<18)',
+        badgeAdults: '⚔️ アダルト・アニメ (18+)',
+        chooseModeTitle: '今日はどちらにしますか？',
+        chooseModeSubtitle: 'クイズ挑戦か、知識カード閲覧を選んでください',
+        quizModeTitle: 'クイズ挑戦',
+        quizModeDesc: '4択クイズでスコアと連続正解に挑戦！詳しい解説付き',
+        factsModeTitle: '豆知識・情報',
+        factsModeDesc: 'あなたの年齢にぴったりな驚くべき事実や知識を発見しよう',
+        changeAgeBtn: '年齢を変更する',
+        backBtn: '戻る',
+        diffSelectTitle: 'ステージ・難易度を選択（初級〜上級）：',
+        diffProgressive: '自動ステップアップ',
+        diffProgSub: '初級 ➔ 上級',
+        diffEasy: 'ステージ1：初級',
+        diffMedium: 'ステージ2：中級',
+        diffHard: 'ステージ3：上級',
+        shortEasy: '初級',
+        shortMedium: '中級',
+        shortHard: '上級',
+        stageUpMsg: 'ランクアップ！次のステージへ：',
+        chooseCatTitle: 'カテゴリーを選択',
+        chooseCatSubtitle: '好きなジャンルを選ぶか、ランダムで全ジャンルに挑戦',
+        catReligion: '宗教・精神文化',
+        catReligionSub: '道徳、歴史、信仰の物語',
+        catFootball: 'サッカー',
+        catFootballSub: 'W杯、伝説の選手、ルール',
+        catAnimals: '動物の世界',
+        catAnimalsSub: '野生の秘密と不思議な生き物',
+        catGeneral: '一般教養・科学',
+        catGeneralSub: '宇宙、歴史、最新の発見',
+        catRandom: 'ランダム（全ジャンル）',
+        catRandomSub: '宗教・サッカー・動物・教養がランダムに出題',
+        categoriesBtn: 'ジャンル',
+        generatingAI: 'AIがあなた専用の問題を作成中...',
+        aiTailoredNote: '年齢とステージ難易度に合わせて調整中',
+        generatingFactAI: 'AIが興味深い豆知識を取得中...',
+        nextQuestionBtn: '次の問題',
+        nextFactBtn: '次の豆知識',
+        correctTitle: '🎉 正解！素晴らしい！',
+        wrongTitle: '💡 不正解！解説はこちら：',
+        statusAI: 'AI 接続中',
+        statusOffline: 'オフライン'
+      },
+      tr: {
+        dir: 'ltr', flag: '🇹🇷', code: 'TR', name: 'Türkçe',
+        creatorCredit: 'من صنع علاء الدين الصياد • Yapım: Alaa Al-Sayyad',
+        step2Badge: 'Adım 2 • Yaş Seçimi',
+        ageTitle: 'Kaç yaşındasınız?',
+        ageSubtitle: 'Soruları, bilgileri ve animasyonları yaşınıza göre özel olarak uyarlıyoruz',
+        under18Title: '18 Yaş Altı',
+        under18Desc: 'Eğlenceli çizgi film animasyonları ile çocuklar ve gençler için keyifli sorular ve bilgiler!',
+        over18Title: '18 Yaş ve Üzeri',
+        over18Desc: 'Detaylı anime tarzı görseller ve efektlerle yetişkinler için derin ve zorlayıcı içerikler!',
+        exactAgeLabel: 'Veya tam yaşınızı girin:',
+        confirmBtn: 'Onayla',
+        badgeKids: '🎈 Genç & Çocuk Modu (<18)',
+        badgeAdults: '⚔️ Yetişkin Anime Modu (18+)',
+        chooseModeTitle: 'Bugün ne yapmak istersiniz?',
+        chooseModeSubtitle: 'Bilgi yarışması veya ilginç bilgiler arasında seçim yapın',
+        quizModeTitle: 'Soru & Yarışma',
+        quizModeDesc: 'Çoktan seçmeli akıllı sorular, seri puanı ve anında açıklamalarla bilginizi test edin',
+        factsModeTitle: 'Bilgiler & Gerçekler',
+        factsModeDesc: 'Yaş grubunuza özel hazırlanmış şaşırtıcı gerçekleri keşfedin',
+        changeAgeBtn: 'Yaş Grubunu Değiştir',
+        backBtn: 'Geri',
+        diffSelectTitle: 'Aşama / Zorluk Seviyesi Seçin:',
+        diffProgressive: 'Otomatik İlerleme',
+        diffProgSub: 'Kolay ➔ Zor',
+        diffEasy: 'Aşama 1: Kolay',
+        diffMedium: 'Aşama 2: Orta',
+        diffHard: 'Aşama 3: Zor',
+        shortEasy: 'Kolay',
+        shortMedium: 'Orta',
+        shortHard: 'Zor',
+        stageUpMsg: 'Seviye Atladın! Yeni aşama:',
+        chooseCatTitle: 'Kategori Seçin',
+        chooseCatSubtitle: 'İstediğiniz alanı seçin veya karışık sorular için Rastgele seçeneğine tıklayın',
+        catReligion: 'Dini Bilgiler',
+        catReligionSub: 'Değerler, tarih ve manevi kıssalar',
+        catFootball: 'Futbol',
+        catFootballSub: 'Turnuvalar, efsaneler ve kurallar',
+        catAnimals: 'Hayvanlar Alemi',
+        catAnimalsSub: 'Doğanın sırları ve ilginç canlılar',
+        catGeneral: 'Genel Kültür & Bilim',
+        catGeneralSub: 'Uzay, tarih ve keşifler',
+        catRandom: 'Rastgele (Tüm Kategoriler)',
+        catRandomSub: 'Din, Futbol, Hayvanlar ve Genel Kültür karışımı',
+        categoriesBtn: 'Kategoriler',
+        generatingAI: 'Yapay zeka size özel soru hazırlıyor...',
+        aiTailoredNote: 'Yaşınıza ve aşama zorluğuna göre ayarlandı',
+        generatingFactAI: 'Yapay zeka sizin için harika bir bilgi getiriyor...',
+        nextQuestionBtn: 'Sonraki Soru',
+        nextFactBtn: 'Yeni Bilgi',
+        correctTitle: '🎉 Doğru Cevap! Harika!',
+        wrongTitle: '💡 Yanlış Cevap, işte açıklaması:',
+        statusAI: 'AI Aktif',
+        statusOffline: 'Çevrimdışı'
+      },
+      es: {
+        dir: 'ltr', flag: '🇪🇸', code: 'ES', name: 'Español',
+        creatorCredit: 'من صنع علاء الدين الصياد • Creado por Alaa Al-Sayyad',
+        step2Badge: 'Paso 2 • Selección de Edad',
+        ageTitle: '¿Qué edad tienes?',
+        ageSubtitle: 'Adaptamos las preguntas, datos y animaciones exactamente a tu edad',
+        under18Title: 'Menor de 18 años',
+        under18Desc: 'Animaciones de dibujos animados divertidas con preguntas y datos entretenidos para niños y jóvenes.',
+        over18Title: '18 años o más',
+        over18Desc: 'Estilo visual anime detallado con efectos épicos y preguntas profundas para adultos.',
+        exactAgeLabel: 'O ingresa tu edad exacta:',
+        confirmBtn: 'Confirmar',
+        badgeKids: '🎈 Modo Niños y Jóvenes (<18)',
+        badgeAdults: '⚔️ Modo Adultos Anime (18+)',
+        chooseModeTitle: '¿Qué prefieres hoy?',
+        chooseModeSubtitle: 'Elige entre un desafío de preguntas o tarjetas de datos curiosos',
+        quizModeTitle: 'Preguntas y Reto',
+        quizModeDesc: 'Pon a prueba tu mente con preguntas de opción múltiple, rachas y explicaciones',
+        factsModeTitle: 'Datos e Información',
+        factsModeDesc: 'Descubre datos asombrosos diseñados especialmente para tu edad',
+        changeAgeBtn: 'Cambiar grupo de edad',
+        backBtn: 'Volver',
+        diffSelectTitle: 'Elige Etapa / Nivel de Dificultad:',
+        diffProgressive: 'Progresión Auto',
+        diffProgSub: 'Fácil ➔ Difícil',
+        diffEasy: 'Etapa 1: Fácil',
+        diffMedium: 'Etapa 2: Medio',
+        diffHard: 'Etapa 3: Difícil',
+        shortEasy: 'Fácil',
+        shortMedium: 'Medio',
+        shortHard: 'Difícil',
+        stageUpMsg: '¡Subiste de nivel! Avanzaste a',
+        chooseCatTitle: 'Elige una Categoría',
+        chooseCatSubtitle: 'Selecciona un tema o elige Aleatorio para mezclar todos',
+        catReligion: 'Religión y Valores',
+        catReligionSub: 'Historia espiritual, valores y relatos',
+        catFootball: 'Fútbol',
+        catFootballSub: 'Mundiales, leyendas y reglas',
+        catAnimals: 'Reino Animal',
+        catAnimalsSub: 'Secretos de la naturaleza y fauna',
+        catGeneral: 'Cultura General',
+        catGeneralSub: 'Espacio, ciencia e historia',
+        catRandom: 'Aleatorio (Todos los temas)',
+        catRandomSub: 'Mezcla dinámica de Religión, Fútbol, Animales y Cultura',
+        categoriesBtn: 'Categorías',
+        generatingAI: 'La IA está creando una pregunta para ti...',
+        aiTailoredNote: 'Calibrado según tu edad y etapa',
+        generatingFactAI: 'La IA está buscando un dato fascinante...',
+        nextQuestionBtn: 'Siguiente Pregunta',
+        nextFactBtn: 'Nuevo Dato',
+        correctTitle: '🎉 ¡Correcto! ¡Excelente!',
+        wrongTitle: '💡 No exactamente, mira por qué:',
+        statusAI: 'IA Activa',
+        statusOffline: 'Sin Internet'
+      }
+    };
+
+    // =========================================================================
+    // 3. BUILT-IN RICH OFFLINE KNOWLEDGE & QUIZ ENGINE (EASY, MEDIUM, HARD)
+    // =========================================================================
+    const OFFLINE_BANK = {
+      quiz: [
+        {
+          id: 'qr_k1', cat: 'religion', age: 'kids', diff: 'easy',
+          q: {
+            ar: 'ما هي أول سورة في ترتيب المصحف الشريف؟',
+            en: 'What is the very first Surah (chapter) in the Holy Quran?',
+            zh: '《古兰经》中的第一章叫什么名字？',
+            ja: 'クルアーン（コーラン）の最初の章（スーラ）は何ですか？',
+            tr: 'Kur’an-ı Kerim’in ilk suresi hangisidir?',
+            es: '¿Cuál es la primera Sura (capítulo) del Sagrado Corán?'
+          },
+          opts: {
+            ar: ['سورة الفاتحة', 'سورة الإخلاص', 'سورة الناس', 'سورة البقرة'],
+            en: ['Surah Al-Fatiha', 'Surah Al-Ikhlas', 'Surah An-Nas', 'Surah Al-Baqarah'],
+            zh: ['开端章 (Al-Fatiha)', '忠诚章 (Al-Ikhlas)', '世人章 (An-Nas)', '黄牛章 (Al-Baqarah)'],
+            ja: ['開端章 (アル・ファーティハ)', '純正章 (アル・イフラース)', '人々章 (アン・ナース)', '雌牛章 (アル・バカラ)'],
+            tr: ['Fatiha Suresi', 'İhlas Suresi', 'Nas Suresi', 'Bakara Suresi'],
+            es: ['Sura Al-Fatiha', 'Sura Al-Ikhlas', 'Sura An-Nas', 'Sura Al-Baqarah']
+          },
+          ans: 0,
+          exp: {
+            ar: 'سورة الفاتحة هي أول سورة في القرآن الكريم وتُقرأ في كل ركعة من الصلاة.',
+            en: 'Surah Al-Fatiha (The Opening) is the first chapter of the Quran and is recited in every prayer.',
+            zh: '《开端章》是《古兰经》的第一章，在每次礼拜中都会诵读。',
+            ja: 'アル・ファーティハ（開端章）はクルアーンの最初の章で、毎回の礼拝で唱えられます。',
+            tr: 'Fatiha Suresi Kur’an’ın ilk suresidir ve namazın her rekatında okunur.',
+            es: 'Al-Fatiha (La Apertura) es el primer capítulo del Corán y se recita en cada oración.'
+          }
+        },
+        {
+          id: 'qr_m1', cat: 'religion', age: 'kids', diff: 'medium',
+          q: {
+            ar: 'في أي شهر هجري أُنزل القرآن الكريم؟',
+            en: 'In which Islamic Hijri month was the Holy Quran revealed?',
+            zh: '《古兰经》是在伊斯兰历的哪个月份降示的？',
+            ja: 'クルアーンが啓示されたイスラム暦の月は何月ですか？',
+            tr: 'Kur’an-ı Kerim hangi hicri ayda indirilmeye başlanmıştır?',
+            es: '¿En qué mes islámico (Hégira) fue revelado el Sagrado Corán?'
+          },
+          opts: {
+            ar: ['شهر رمضان', 'شهر محرم', 'شهر رجب', 'شهر شوال'],
+            en: ['Ramadan', 'Muharram', 'Rajab', 'Shawwal'],
+            zh: ['莱麦丹月（斋月）', '穆哈兰姆月', '赖哲卜月', '闪瓦鲁月'],
+            ja: ['ラマダーン月', 'ムハッラム月', 'ラジャブ月', 'シャウワール月'],
+            tr: ['Ramazan Ayı', 'Muharrem Ayı', 'Recep Ayı', 'Şevval Ayı'],
+            es: ['Ramadán', 'Muharram', 'Rayab', 'Shawwal']
+          },
+          ans: 0,
+          exp: {
+            ar: 'أُنزل القرآن الكريم في ليلة القدر المباركة من شهر رمضان الفضيل.',
+            en: 'The Quran was revealed during Laylat al-Qadr in the blessed month of Ramadan.',
+            zh: '《古兰经》降示于尊贵的莱麦丹月（斋月）的盖德尔夜。',
+            ja: 'クルアーンは聖なるラマダーン月の「みいつの夜」に啓示されました。',
+            tr: 'Kur’an-ı Kerim mübarek Ramazan ayındaki Kadir Gecesi’nde indirilmiştir.',
+            es: 'El Corán fue revelado durante la Noche del Destino en el mes de Ramadán.'
+          }
+        },
+        {
+          id: 'qr_a1', cat: 'religion', age: 'adults', diff: 'hard',
+          q: {
+            ar: 'ما هي أطول آية في القرآن الكريم وفي أي سورة تقع؟',
+            en: 'Which is the longest verse in the Quran and in which Surah is it found?',
+            zh: '《古兰经》中最长的一节经文是什么，位于哪一章？',
+            ja: 'クルアーンで最も長い節は何で、どの章にありますか？',
+            tr: 'Kur’an-ı Kerim’deki en uzun ayet hangisidir ve hangi surededir?',
+            es: '¿Cuál es el versículo más largo del Corán y en qué Sura se encuentra?'
+          },
+          opts: {
+            ar: ['آية الدَّين - سورة البقرة (282)', 'آية الكرسي - سورة البقرة (255)', 'آية النور - سورة النور (35)', 'آية المواريث - سورة النساء (11)'],
+            en: ['Verse of Debt - Al-Baqarah (2:282)', 'Ayat al-Kursi - Al-Baqarah (2:255)', 'Verse of Light - An-Nur (24:35)', 'Verse of Inheritance - An-Nisa (4:11)'],
+            zh: ['借贷节 - 黄牛章 (2:282)', '宝座节 - 黄牛章 (2:255)', '光明节 - 光明章 (24:35)', '遗产节 - 妇女章 (4:11)'],
+            ja: ['債務の節 - 雌牛章 (2:282)', '玉座の節 - 雌牛章 (2:255)', '光の節 - 御光章 (24:35)', '相続の節 - 婦人章 (4:11)'],
+            tr: ['Müdayene (Borç) Ayeti - Bakara (282)', 'Ayetel Kürsi - Bakara (255)', 'Nur Ayeti - Nur (35)', 'Miras Ayeti - Nisa (11)'],
+            es: ['Versículo de la Deuda - Al-Baqarah (2:282)', 'Ayat al-Kursi - Al-Baqarah (2:255)', 'Versículo de la Luz - An-Nur (24:35)', 'Versículo de la Herencia - An-Nisa (4:11)']
+          },
+          ans: 0,
+          exp: {
+            ar: 'آية الدَّين (رقم 282 من سورة البقرة) هي أطول آية في القرآن وتتناول توثيق المعاملات المالية والديون لحفظ الحقوق.',
+            en: 'Ayat al-Dayn (Al-Baqarah 2:282) spans a full page and establishes legal documentation for financial debts.',
+            zh: '《黄牛章》第282节（借贷节）是《古兰经》中最长的一节，规范了债务契约与金融公正。',
+            ja: '雌牛章282節（債務の節）はクルアーン最長の節であり、金銭貸借の文書化による権利保護を定めています。',
+            tr: 'Bakara Suresi 282. ayet (Müdayene Ayeti) Kur’an’ın en uzun ayetidir ve borçların yazıya geçirilmesini emreder.',
+            es: 'El versículo 282 de Al-Baqarah regula la documentación escrita de los préstamos y deudas.'
+          }
+        },
+        {
+          id: 'qf_k1', cat: 'football', age: 'kids', diff: 'easy',
+          q: {
+            ar: 'كم عدد لاعبي فريق كرة القدم الواحد داخل الملعب أثناء المباراة؟',
+            en: 'How many players are on the field for one football team during a match?',
+            zh: '一场足球比赛中，每支球队在场上有多少名球员？',
+            ja: 'サッカーの試合中、1チームのピッチ上の選手は何人ですか？',
+            tr: 'Bir futbol maçında bir takımın sahada kaç oyuncusu bulunur?',
+            es: '¿Cuántos jugadores tiene un equipo de fútbol en el campo durante un partido?'
+          },
+          opts: {
+            ar: ['11 لاعباً', '9 لاعبين', '7 لاعبين', '15 لاعباً'],
+            en: ['11 players', '9 players', '7 players', '15 players'],
+            zh: ['11 名球员', '9 名球员', '7 名球员', '15 名球员'],
+            ja: ['11人', '9人', '7人', '15人'],
+            tr: ['11 oyuncu', '9 oyuncu', '7 oyuncu', '15 oyuncu'],
+            es: ['11 jugadores', '9 jugadores', '7 jugadores', '15 jugadores']
+          },
+          ans: 0,
+          exp: {
+            ar: 'يتكون كل فريق في كرة القدم من 11 لاعباً داخل الملعب، من بينهم حارس المرمى.',
+            en: 'Each football team fields 11 players on the pitch, including 1 goalkeeper.',
+            zh: '每支足球队在场上共有11名球员，其中包括1名守门员。',
+            ja: 'サッカーはゴールキーパー1人を含め、1チーム11人でプレーします。',
+            tr: 'Futbolda her takım kaleci dahil sahada 11 oyuncu ile mücadele eder.',
+            es: 'Cada equipo juega con 11 futbolistas en el campo, incluido el portero.'
+          }
+        },
+        {
+          id: 'qf_m1', cat: 'football', age: 'adults', diff: 'medium',
+          q: {
+            ar: 'أي منتخب يحمل الرقم القياسي في عدد مرات الفوز بكأس العالم لكرة القدم (5 ألقاب)؟',
+            en: 'Which national team holds the all-time record with 5 FIFA World Cup titles?',
+            zh: '哪支国家队以5次夺冠保持着国际足联世界杯历史夺冠次数纪录？',
+            ja: 'FIFAワールドカップ史上最多5回の優勝記録を持つ代表チームはどこですか？',
+            tr: '5 şampiyonlukla FIFA Dünya Kupası’nı en çok kazanan ülke hangisidir?',
+            es: '¿Qué selección nacional tiene el récord histórico con 5 títulos de la Copa Mundial?'
+          },
+          opts: {
+            ar: ['البرازيل', 'ألمانيا', 'الأرجنتين', 'إيطاليا'],
+            en: ['Brazil', 'Germany', 'Argentina', 'Italy'],
+            zh: ['巴西', '德国', '阿根廷', '意大利'],
+            ja: ['ブラジル', 'ドイツ', 'アルゼンチン', 'イタリア'],
+            tr: ['Brezilya', 'Almanya', 'Arjantin', 'İtalya'],
+            es: ['Brasil', 'Alemania', 'Argentina', 'Italia']
+          },
+          ans: 0,
+          exp: {
+            ar: 'فازت البرازيل بكأس العالم 5 مرات أعوام: 1958، 1962، 1970، 1994، و2002.',
+            en: 'Brazil won the World Cup 5 times: 1958, 1962, 1970, 1994, and 2002.',
+            zh: '巴西队分别在1958、1962、1970、1994和2002年五次捧起大力神杯。',
+            ja: 'ブラジルは1958・1962・1970・1994・2002年の計5回優勝しています。',
+            tr: 'Brezilya 1958, 1962, 1970, 1994 ve 2002 yıllarında toplam 5 kez Dünya Kupası’nı kazandı.',
+            es: 'Brasil ganó el Mundial 5 veces: en 1958, 1962, 1970, 1994 y 2002.'
+          }
+        },
+        {
+          id: 'qf_a1', cat: 'football', age: 'adults', diff: 'hard',
+          q: {
+            ar: 'من هو اللاعب الوحيد في التاريخ الذي فاز بكأس العالم كلاعب (مرتين) وكمدرب؟',
+            en: 'Who is the only person in history to win the FIFA World Cup twice as a player and once as head coach?',
+            zh: '历史上唯一一位作为球员（两次）和主教练都赢得过世界杯冠军的人是谁？',
+            ja: '選手として2回、監督として1回FIFAワールドカップを制覇した史上唯一の人物は誰？',
+            tr: 'Tarihte hem futbolcu olarak (iki kez) hem de teknik direktör olarak Dünya Kupası kazanan tek kişi kimdir?',
+            es: '¿Quién es la única persona en la historia en ganar el Mundial dos veces como jugador y una como entrenador?'
+          },
+          opts: {
+            ar: ['ماريو زاغالو', 'فرانز بيكنباور', 'ديدييه ديشامب', 'زين الدين زيدان'],
+            en: ['Mário Zagallo', 'Franz Beckenbauer', 'Didier Deschamps', 'Zinedine Zidane'],
+            zh: ['马里奥·扎加洛', '弗朗茨·贝肯鲍尔', '迪迪埃·德尚', '齐内丁·齐达内'],
+            ja: ['マリオ・ザガロ', 'フランツ・ベッケンバウアー', 'ディディエ・デシャン', 'ジネディーヌ・ジダン'],
+            tr: ['Mário Zagallo', 'Franz Beckenbauer', 'Didier Deschamps', 'Zinedine Zidane'],
+            es: ['Mário Zagallo', 'Franz Beckenbauer', 'Didier Deschamps', 'Zinedine Zidane']
+          },
+          ans: 0,
+          exp: {
+            ar: 'البرازيلي ماريو زاغالو فاز بكأس العالم كلاعب عامي 1958 و1962، وكمدرب عام 1970.',
+            en: 'Brazil’s Mário Zagallo won as a player in 1958 & 1962, and as manager in 1970.',
+            zh: '巴西传奇扎加洛在1958年和1962年作为球员夺冠，并在1970年作为主教练率队夺冠。',
+            ja: 'ブラジルのマリオ・ザガロは1958・62年に選手として、1970年に監督として優勝しました。',
+            tr: 'Brezilyalı Mário Zagallo 1958 ve 1962’de oyuncu, 1970’te ise teknik direktör olarak kupayı kazandı.',
+            es: 'El brasileño Mário Zagallo ganó como jugador en 1958 y 1962, y como técnico en 1970.'
+          }
+        },
+        {
+          id: 'qa_k1', cat: 'animals', age: 'kids', diff: 'easy',
+          q: {
+            ar: 'ما هو أسرع حيوان بري على وجه الأرض؟',
+            en: 'What is the fastest land animal on Earth?',
+            zh: '地球上奔跑速度最快的陆地动物是什么？',
+            ja: '地球上で最も速く走る陸上動物は何ですか？',
+            tr: 'Dünyadaki en hızlı kara hayvanı hangisidir?',
+            es: '¿Cuál es el animal terrestre más rápido de la Tierra?'
+          },
+          opts: {
+            ar: ['الفهد (الشيتا)', 'الأسد', 'الحصان', 'الكنغر'],
+            en: ['Cheetah', 'Lion', 'Horse', 'Kangaroo'],
+            zh: ['猎豹', '狮子', '马', '袋鼠'],
+            ja: ['チーター', 'ライオン', 'ウマ', 'カンガルー'],
+            tr: ['Çita', 'Aslan', 'At', 'Kanguru'],
+            es: ['Guepardo', 'León', 'Caballo', 'Canguro']
+          },
+          ans: 0,
+          exp: {
+            ar: 'يمكن للفهد (الشيتا) أن يصل إلى سرعة 110-120 كيلومتراً في الساعة في ثوانٍ معدودة!',
+            en: 'A cheetah can sprint up to 110–120 km/h (70–75 mph) in just a few seconds!',
+            zh: '猎豹在短短几秒钟内就能加速到每小时 110-120 公里！',
+            ja: 'チーターはわずか数秒で時速110〜120kmに達することができます！',
+            tr: 'Çita sadece birkaç saniye içinde saatte 110-120 km hıza ulaşabilir!',
+            es: 'El guepardo puede alcanzar velocidades de 110 a 120 km/h en pocos segundos.'
+          }
+        },
+        {
+          id: 'qa_m1', cat: 'animals', age: 'kids', diff: 'medium',
+          q: {
+            ar: 'أي طائر يستطيع الطيران إلى الخلف؟',
+            en: 'Which bird is the only one capable of flying backwards?',
+            zh: '哪种鸟类是唯一能够向后倒飞的鸟？',
+            ja: '後ろ向きに飛ぶことができる唯一の鳥はどれですか？',
+            tr: 'Geriye doğru uçabilen tek kuş türü hangisidir?',
+            es: '¿Qué ave es la única capaz de volar hacia atrás?'
+          },
+          opts: {
+            ar: ['طائر الطنان', 'النسر', 'البومة', 'البطريق'],
+            en: ['Hummingbird', 'Eagle', 'Owl', 'Penguin'],
+            zh: ['蜂鸟', '老鹰', '猫头鹰', '企鹅'],
+            ja: ['ハチドリ', 'ワシ', 'フクロウ', 'ペンギン'],
+            tr: ['Sinek Kuşu', 'Kartal', 'Baykuş', 'Penguen'],
+            es: ['Colibrí', 'Águila', 'Búho', 'Pingüino']
+          },
+          ans: 0,
+          exp: {
+            ar: 'يستطيع طائر الطنان تحريك أجنحته على شكل رقم 8 بسرعة فائقة تمكّنه من الطيران للأمام والخلف والوقوف في الهواء!',
+            en: 'Hummingbirds rotate their wings in a figure-eight pattern, allowing them to hover and fly backwards!',
+            zh: '蜂鸟以“8”字形高速扇动翅膀，使其能够悬停甚至向后飞行！',
+            ja: 'ハチドリは翼を8の字に高速回転させることで、ホバリングや後ろ向き飛行ができます！',
+            tr: 'Sinek kuşları kanatlarını 8 şeklinde çok hızlı çırparak havada asılı kalabilir ve geriye uçabilir!',
+            es: 'Los colibríes mueven sus alas en forma de ocho, lo que les permite flotar y volar hacia atrás.'
+          }
+        },
+        {
+          id: 'qa_a1', cat: 'animals', age: 'adults', diff: 'hard',
+          q: {
+            ar: 'أي كائن بحري يمتلك ثلاثة قلوب وتسعة أدمغة ودمه أزرق اللون؟',
+            en: 'Which marine creature has three hearts, nine brains, and blue copper-based blood?',
+            zh: '哪种海洋生物拥有三颗心脏、九个大脑以及蓝色的血液？',
+            ja: '3つの心臓、9つの脳、そして青い血液を持つ海洋生物はどれ？',
+            tr: 'Üç kalbi, dokuz beyni ve mavi kanı olan deniz canlısı hangisidir?',
+            es: '¿Qué criatura marina tiene tres corazones, nueve cerebros y sangre azul?'
+          },
+          opts: {
+            ar: ['الأخطبوط', 'قرش الحوت', 'قنديل البحر', 'حصان البحر'],
+            en: ['Octopus', 'Whale Shark', 'Jellyfish', 'Seahorse'],
+            zh: ['章鱼', '鲸鲨', '水母', '海马'],
+            ja: ['タコ', 'ジンベエザメ', 'クラゲ', 'タツノオトシゴ'],
+            tr: ['Ahtapot', 'Balina Köpekbalığı', 'Denizanası', 'Denizatı'],
+            es: ['Pulpo', 'Tiburón ballena', 'Medusa', 'Caballito de mar']
+          },
+          ans: 0,
+          exp: {
+            ar: 'يعتمد دم الأخطبوط على الهيموسيانين الغني بالنحاس لنقل الأكسجين بكفاءة في أعماق المحيط الباردة.',
+            en: 'Octopuses use copper-rich hemocyanin (turning blood blue) to transport oxygen efficiently in cold deep waters.',
+            zh: '章鱼血液中含有富含铜的血蓝蛋白（呈蓝色），在深海低温环境中比血红蛋白更有效地输送氧气。',
+            ja: 'タコの血液は銅を含むヘモシアニン（青色）を使っており、冷たい深海でも効率よく酸素を運びます。',
+            tr: 'Ahtapotların kanı bakır bazlı hemosiyanin içerdiği için mavidir ve soğuk derin sularda oksijeni verimli taşır.',
+            es: 'Los pulpos tienen hemocianina rica en cobre, lo que tiñe su sangre de azul y les ayuda en aguas frías.'
+          }
+        },
+        {
+          id: 'qg_k1', cat: 'general', age: 'kids', diff: 'easy',
+          q: {
+            ar: 'ما هو الكوكب الأحمر في مجموعتنا الشمسية؟',
+            en: 'Which planet in our Solar System is known as the Red Planet?',
+            zh: '太阳系中被称为“红色星球”的是哪颗行星？',
+            ja: '太陽系で「赤い惑星」と呼ばれる惑星はどれですか？',
+            tr: 'Güneş Sistemimizde "Kızıl Gezegen" olarak bilinen gezegen hangisidir?',
+            es: '¿Qué planeta de nuestro Sistema Solar es conocido como el Planeta Rojo?'
+          },
+          opts: {
+            ar: ['كوكب المريخ', 'كوكب الزهرة', 'كوكب المشتري', 'كوكب زحل'],
+            en: ['Mars', 'Venus', 'Jupiter', 'Saturn'],
+            zh: ['火星', '金星', '木星', '土星'],
+            ja: ['火星', '金星', '木星', '土星'],
+            tr: ['Mars', 'Venüs', 'Jüpiter', 'Satürn'],
+            es: ['Marte', 'Venus', 'Júpiter', 'Saturno']
+          },
+          ans: 0,
+          exp: {
+            ar: 'يبدو كوكب المريخ أحمر اللون بسبب وجود أكسيد الحديد (الصدأ) بكثرة على سطحه!',
+            en: 'Mars looks reddish because its surface soil is rich in iron oxide (rust)!',
+            zh: '火星表面富含氧化铁（铁锈），因此看起来呈现迷人的红色！',
+            ja: '火星の表面には酸化鉄（赤さび）が多く含まれているため赤く見えます！',
+            tr: 'Mars’ın yüzeyi demir oksit (pas) açısından zengin olduğu için kızıl görünür!',
+            es: 'Marte se ve rojizo porque su superficie contiene mucho óxido de hierro.'
+          }
+        },
+        {
+          id: 'qg_m1', cat: 'general', age: 'adults', diff: 'medium',
+          q: {
+            ar: 'ما هو الغاز الأكثر وفرة في الغلاف الجوي لكوكب الأرض؟',
+            en: 'Which gas makes up about 78% of Earth’s atmosphere?',
+            zh: '地球大气层中含量最丰富的气体（约占78%）是什么？',
+            ja: '地球の大気の約78%を占める最も豊富な気体は何ですか？',
+            tr: 'Dünya atmosferinin yaklaşık %78’ini oluşturan en yaygın gaz hangisidir?',
+            es: '¿Qué gas constituye aproximadamente el 78% de la atmósfera terrestre?'
+          },
+          opts: {
+            ar: ['النيتروجين', 'الأكسجين', 'ثاني أكسيد الكربون', 'الأرغون'],
+            en: ['Nitrogen', 'Oxygen', 'Carbon Dioxide', 'Argon'],
+            zh: ['氮气', '氧气', '二氧化碳', '氩气'],
+            ja: ['窒素', '酸素', '二酸化炭素', 'アルゴン'],
+            tr: ['Azot (Nitrojen)', 'Oksijen', 'Karbondioksit', 'Argon'],
+            es: ['Nitrógeno', 'Oxígeno', 'Dióxido de carbono', 'Argón']
+          },
+          ans: 0,
+          exp: {
+            ar: 'يشكل النيتروجين حوالي 78% من الغلاف الجوي للأرض، يليه الأكسجين بنسبة تقارب 21%.',
+            en: 'Nitrogen accounts for roughly 78% of Earth’s atmosphere, while Oxygen makes up about 21%.',
+            zh: '氮气占地球大气的约78%，而氧气约占21%。',
+            ja: '地球の大気は窒素が約78%、酸素が約21%を占めています。',
+            tr: 'Dünya atmosferinin yaklaşık %78’i azottan, %21’i ise oksijenden oluşur.',
+            es: 'El nitrógeno representa el 78% de la atmósfera, mientras que el oxígeno es el 21%.'
+          }
+        },
+        {
+          id: 'qg_a1', cat: 'general', age: 'adults', diff: 'hard',
+          q: {
+            ar: 'ما هو العنصر الكيميائي الفلزي الوحيد الذي يوجد في الحالة السائلة في درجة حرارة الغرفة القياسية؟',
+            en: 'Which metallic element is liquid at standard room temperature?',
+            zh: '哪种金属元素在标准室温下呈液态？',
+            ja: '標準的な室温で液体として存在する唯一の金属元素は何ですか？',
+            tr: 'Standart oda sıcaklığında sıvı halde bulunan tek metal element hangisidir?',
+            es: '¿Qué elemento metálico es líquido a temperatura ambiente estándar?'
+          },
+          opts: {
+            ar: ['الزئبق (Hg)', 'الغاليوم (Ga)', 'السيزيوم (Cs)', 'الليثيوم (Li)'],
+            en: ['Mercury (Hg)', 'Gallium (Ga)', 'Cesium (Cs)', 'Lithium (Li)'],
+            zh: ['汞 (Hg)', '镓 (Ga)', '铯 (Cs)', '锂 (Li)'],
+            ja: ['水銀 (Hg)', 'ガリウム (Ga)', 'セシウム (Cs)', 'リチウム (Li)'],
+            tr: ['Cıva (Hg)', 'Galyum (Ga)', 'Sezyum (Cs)', 'Lityum (Li)'],
+            es: ['Mercurio (Hg)', 'Galio (Ga)', 'Cesio (Cs)', 'Litio (Li)']
+          },
+          ans: 0,
+          exp: {
+            ar: 'الزئبق (Hg) هو الفلز الوحيد السائل عند درجة حرارة الغرفة القياسية (25°C) بسبب التأثيرات النسبية لإلكتروناته.',
+            en: 'Mercury (Hg) is the only metallic element that remains liquid at standard room temperature due to relativistic electron effects.',
+            zh: '由于相对论性电子效应削弱了金属键，汞（Hg）是标准室温下唯一保持液态的金属。',
+            ja: '水銀（Hg）は電子の相対論的効果により金属結合が弱く、室温で液体となる唯一の金属です。',
+            tr: 'Cıva (Hg), göreceli elektron etkileri nedeniyle standart oda sıcaklığında sıvı kalan tek metaldir.',
+            es: 'El mercurio (Hg) es el único metal líquido a temperatura ambiente estándar debido a efectos relativistas.'
+          }
+        }
+      ],
+      facts: [
+        {
+          id: 'fr_k1', cat: 'religion', age: 'kids', diff: 'easy', emoji: '🕌',
+          title: {
+            ar: 'الابتسامة صدقة!',
+            en: 'A Smile is Charity!',
+            zh: '微笑也是一种慈善！',
+            ja: '笑顔は立派な施し（サダカ）！',
+            tr: 'Tebessüm Etmek Sadakadır!',
+            es: '¡Una sonrisa es caridad!'
+          },
+          body: {
+            ar: 'علّمنا النبي محمد ﷺ أن الابتسامة في وجه أخيك والإنسان الذي تقابله هي صدقة تُؤجر عليها وتنشر المحبة والسعادة بين الناس.',
+            en: 'Prophet Muhammad (peace be upon him) taught that smiling warmly at others is an act of charity that spreads kindness and joy.',
+            zh: '先知教导我们，对他人报以真诚的微笑就是一种善行，能传播善意与快乐。',
+            ja: '人に対して温かい笑顔を向けることは、優しさと喜びを広げる立派な善行（サダカ）であると教えられています。',
+            tr: 'Peygamber Efendimiz (s.a.v.), insanlara güler yüzle tebessüm etmenin bile bir sadaka olduğunu müjdelemiştir.',
+            es: 'Sonreír amablemente a los demás es considerado un acto de caridad que difunde alegría y bondad.'
+          },
+          bonus: {
+            ar: 'جرّب أن تبتسم لعائلتك وأصدقائك اليوم!',
+            en: 'Try sharing a warm smile with your family and friends today!',
+            zh: '今天试着对家人和朋友露出温暖的微笑吧！',
+            ja: '今日、家族や友達に素敵な笑顔を見せてみよう！',
+            tr: 'Bugün ailene ve arkadaşlarına kocaman gülümsemeyi unutma!',
+            es: '¡Intenta regalar una gran sonrisa a tu familia y amigos hoy!'
+          }
+        },
+        {
+          id: 'fr_a1', cat: 'religion', age: 'adults', diff: 'hard', emoji: '📜',
+          title: {
+            ar: 'بيت الحكمة والترجمة العلمية',
+            en: 'The House of Wisdom & Scientific Preservation',
+            zh: '智慧宫与人类科学遗产的保存',
+            ja: '知恵の館と科学知識の継承',
+            tr: 'Beytülhikme ve Bilimsel Miras',
+            es: 'La Casa de la Sabiduría y la Ciencia'
+          },
+          body: {
+            ar: 'انطلاقاً من الحث الديني على طلب العلم والتفكر في الكون، ازدهر "بيت الحكمة" في بغداد كأكبر مركز عالمي للبحث والترجمة في العصور الوسطى، حيث طوّر العلماء الجبر والبصريات والطب.',
+            en: 'Inspired by spiritual encouragement to seek knowledge, Baghdad’s House of Wisdom became a premier medieval center for astronomy, algebra, optics, and medicine.',
+            zh: '受追求知识精神的鼓舞，巴格达“智慧宫”成为中世纪天文学、代数学、光学和医学的世界级研究中心。',
+            ja: '知識の探求を奨励する精神のもと、バグダードの「知恵の館」は天文学・代数学・光学・医学の世界的中心地となりました。',
+            tr: 'İlim öğrenmeye verilen önemle kurulan Bağdat’taki Beytülhikme; cebir, optik, astronomi ve tıbbın gelişimine öncülük etmiştir.',
+            es: 'Inspirada en la búsqueda del conocimiento, la Casa de la Sabiduría en Bagdad impulsó el álgebra, la óptica y la medicina.'
+          },
+          bonus: {
+            ar: 'كلمة "الخوارزمية" (Algorithm) مشتقة من اسم العالم المسلم محمد بن موسى الخوارزمي.',
+            en: 'The modern word "Algorithm" is derived from the name of mathematician Al-Khwarizmi.',
+            zh: '现代计算机术语“算法 (Algorithm)”一词源自数学家花拉子米的名字。',
+            ja: '現代の「アルゴリズム」という言葉は数学者アル＝フワーリズミーの名に由来します。',
+            tr: 'Günümüzdeki "Algoritma" kelimesi matematikçi Hârizmî’nin adından türemiştir.',
+            es: 'La palabra "Algoritmo" proviene del nombre del matemático Al-Juarismi.'
+          }
+        },
+        {
+          id: 'ff_k1', cat: 'football', age: 'kids', diff: 'easy', emoji: '⚽',
+          title: {
+            ar: 'أول كأس عالم في التاريخ!',
+            en: 'The Very First World Cup!',
+            zh: '历史上第一届世界杯！',
+            ja: '史上初のワールドカップ！',
+            tr: 'Tarihteki İlk Dünya Kupası!',
+            es: '¡El primer Mundial de la historia!'
+          },
+          body: {
+            ar: 'أُقيمت أول بطولة لكأس العالم لكرة القدم عام 1930 في دولة الأوروغواي، وفاز بها منتخب الأوروغواي نفسه أمام جماهيره!',
+            en: 'The first-ever FIFA World Cup took place in 1930 in Uruguay, and the host nation Uruguay won the trophy!',
+            zh: '第一届国际足联世界杯于1930年在乌拉圭举行，东道主乌拉圭队最终捧起了冠军奖杯！',
+            ja: '第1回FIFAワールドカップは1930年にウルグアイで開催され、開催国ウルグアイが初代王者に輝きました！',
+            tr: 'İlk FIFA Dünya Kupası 1930 yılında Uruguay’da düzenlendi ve ev sahibi Uruguay şampiyon oldu!',
+            es: 'La primera Copa Mundial de la FIFA se celebró en 1930 en Uruguay, ¡y la selección anfitriona fue campeona!'
+          },
+          bonus: {
+            ar: 'شارك في تلك البطولة 13 منتخباً فقط!',
+            en: 'Only 13 national teams competed in that inaugural tournament!',
+            zh: '那届首届世界杯只有13支国家队参加！',
+            ja: '当時の参加国はわずか13カ国でした！',
+            tr: 'O ilk turnuvaya sadece 13 milli takım katılmıştı!',
+            es: '¡Solo 13 selecciones nacionales participaron en ese primer torneo!'
+          }
+        },
+        {
+          id: 'ff_a1', cat: 'football', age: 'adults', diff: 'hard', emoji: '🏟️',
+          title: {
+            ar: 'فيزياء ركلة "الموزة" وتأثير ماغنوس',
+            en: 'The Physics of Curveballs & The Magnus Effect',
+            zh: '香蕉球的物理学与马格努斯效应',
+            ja: 'カーブシュートの物理学とマグヌス効果',
+            tr: 'Falsolu Şutların Fiziği ve Magnus Etkisi',
+            es: 'La física de los tiros con efecto y el Efecto Magnus'
+          },
+          body: {
+            ar: 'عندما يركل اللاعب الكرة بجانب قدمه لتدور حول محورها بسرعة عالية، ينشأ فرق في ضغط الهواء على جانبي الكرة يُعرف بـ"تأثير ماغنوس"، مما يجعل الكرة تنحني في الهواء بمسار مذهل.',
+            en: 'When a player imparts high spin on a football, asymmetric air pressure builds around it—known as the Magnus Effect—curving its trajectory mid-air.',
+            zh: '当球员赋予足球高速旋转时，球体两侧会产生不对称的气压差，即“马格努斯效应”，使球在空中划出惊人的弧线。',
+            ja: 'ボールに強い回転を与えると空気の圧力差（マグヌス効果）が生じ、空中で劇的に軌道が曲がります。',
+            tr: 'Topa yüksek dönüş verildiğinde etrafında oluşan hava basıncı farkı (Magnus Etkisi), topun havada kavis almasını sağlar.',
+            es: 'Al imprimir gran rotación al balón se crea una diferencia de presión de aire (Efecto Magnus) que curva su trayectoria.'
+          },
+          bonus: {
+            ar: 'هدف روبرتو كارلوس الشهير عام 1997 ضد فرنسا يُعد أشهر تطبيق عملي لتأثير ماغنوس.',
+            en: 'Roberto Carlos’s iconic 1997 free kick against France remains the textbook example of this phenomenon.',
+            zh: '1997年罗伯托·卡洛斯对阵法国队的经典任意球正是该效应的教科书级案例。',
+            ja: '1997年フランス戦でのロベルト・カルロスのフリーキックは最も有名な実例です。',
+            tr: 'Roberto Carlos’un 1997’de Fransa’ya attığı efsane frikik bu etkinin en ünlü örneğidir.',
+            es: 'El famoso tiro libre de Roberto Carlos en 1997 ante Francia es el ejemplo más célebre.'
+          }
+        },
+        {
+          id: 'fa_k1', cat: 'animals', age: 'kids', diff: 'easy', emoji: '🐬',
+          title: {
+            ar: 'الدلافين تنادي بعضها بالأسماء!',
+            en: 'Dolphins Call Each Other by Name!',
+            zh: '海豚会用“名字”互相呼唤！',
+            ja: 'イルカは名前で呼び合う！',
+            tr: 'Yunuslar Birbirlerini İsimleriyle Çağırır!',
+            es: '¡Los delfines se llaman por su nombre!'
+          },
+          body: {
+            ar: 'يمتلك كل دولفين صفيرًا مميزًا خاصًا به يشبه الاسم، وتستخدم الدلافين هذه الصفارات لتنادي أصدقاءها وعائلتها في المحيط!',
+            en: 'Every dolphin develops a unique signature whistle that acts just like a name, allowing friends and family to call each other underwater!',
+            zh: '每只海豚都有自己独特的“签名哨声”，就像人类的名字一样，用来在海洋中呼唤伙伴！',
+            ja: 'イルカは1頭ずつ固有の「シグネチャー・ホイッスル（名前のような鳴き声）」を持ち、仲間を呼び合います！',
+            tr: 'Her yunusun tıpkı bir isim gibi kendine özgü bir ıslığı vardır ve birbirlerini bu ıslıkla çağırırlar!',
+            es: 'Cada delfín desarrolla un silbido único que funciona como un nombre para llamar a sus amigos en el océano.'
+          },
+          bonus: {
+            ar: 'تستطيع الدلافين تذكّر صفير أصدقائها حتى بعد مرور 20 عاماً!',
+            en: 'Dolphins can remember a friend’s signature whistle even after 20 years apart!',
+            zh: '即使分开20年，海豚依然能记住老朋友的哨声！',
+            ja: 'イルカは20年離れていても仲間の鳴き声を覚えています！',
+            tr: 'Yunuslar arkadaşlarının ıslığını 20 yıl geçse bile unutmayabilir!',
+            es: '¡Los delfines recuerdan el silbido de un amigo incluso después de 20 años!'
+          }
+        },
+        {
+          id: 'fa_a1', cat: 'animals', age: 'adults', diff: 'hard', emoji: '🧬',
+          title: {
+            ar: 'قنديل البحر الخالد بيولوجياً',
+            en: 'The Biologically Immortal Jellyfish',
+            zh: '生物学上“永生”的灯塔水母',
+            ja: '生物学的不老不死を持つベニクラゲ',
+            tr: 'Biyolojik Olarak Ölümsüz Denizanası',
+            es: 'La medusa biológicamente inmortal'
+          },
+          body: {
+            ar: 'يستطيع قنديل البحر (Turritopsis dohrnii) عند تعرضه للشيخوخة أو الخطر إعادة خلاياه البالغة إلى مرحلة الطفولة (البوليب) عبر عملية تُسمى "التمايز التحولي"، ليعيد دورة حياته من جديد!',
+            en: 'When stressed or aging, Turritopsis dohrnii can revert its adult cells back into an immature polyp stage via transdifferentiation, restarting its life cycle.',
+            zh: '灯塔水母在面临衰老或环境压力时，能通过“转分化”过程将成熟细胞逆转为幼年水螅体阶段，重新开启生命周期。',
+            ja: 'ベニクラゲは老化や危機に面すると「分化転換」によって成体細胞を幼生のポリプ期へ若返らせることができます。',
+            tr: 'Turritopsis dohrnii türü denizanası, yaşlandığında veya tehlike anında hücrelerini gençlik evresine (polip) döndürerek yaşam döngüsünü sıfırlayabilir.',
+            es: 'La medusa Turritopsis dohrnii puede revertir sus células adultas a una etapa juvenil mediante transdiferenciación.'
+          },
+          bonus: {
+            ar: 'يدرس العلماء جينات هذا الكائن لفهم آليات تجدد الخلايا البشرية ومكافحة الشيخوخة.',
+            en: 'Geneticists actively study its genome to unlock insights into cellular regeneration and aging.',
+            zh: '科学家正深入研究其基因组，以探索细胞再生与抗衰老的奥秘。',
+            ja: '科学者たちは細胞再生や老化研究の手がかりとしてそのゲノムを研究しています。',
+            tr: 'Bilim insanları hücre yenilenmesi ve yaşlanmayı anlamak için bu canlının genetiğini inceliyor.',
+            es: 'Los científicos estudian su genoma para comprender la regeneración celular.'
+          }
+        },
+        {
+          id: 'fg_k1', cat: 'general', age: 'kids', diff: 'easy', emoji: '🚀',
+          title: {
+            ar: 'يوم واحد على كوكب الزهرة أطول من سنته!',
+            en: 'A Day on Venus is Longer Than Its Year!',
+            zh: '金星上的一天比一年还要长！',
+            ja: '金星の1日は1年よりも長い！',
+            tr: 'Venüs’te Bir Gün, Bir Yılından Daha Uzundur!',
+            es: '¡Un día en Venus dura más que su año!'
+          },
+          body: {
+            ar: 'يدور كوكب الزهرة حول نفسه ببطء شديد لدرجة أن دورته الكاملة حول نفسه تستغرق وقتاً أطول من دورته الكاملة حول الشمس!',
+            en: 'Venus spins so slowly on its axis that one full rotation takes 243 Earth days, while orbiting the Sun takes 225 Earth days!',
+            zh: '金星自转极其缓慢，自转一周需要243个地球日，而绕太阳公转一周只需225个地球日！',
+            ja: '金星は自転が非常に遅く、1回転するのに地球の243日かかりますが、太陽の周りを1周するのは225日です！',
+            tr: 'Venüs kendi ekseni etrafında o kadar yavaş döner ki, bir günü (243 Dünya günü) bir yılından (225 Dünya günü) uzundur!',
+            es: 'Venus gira tan lento sobre su eje (243 días terrestres) que tarda más en dar una vuelta que en orbitar el Sol (225 días).'
+          },
+          bonus: {
+            ar: 'كما أن كوكب الزهرة يدور في الاتجاه المعاكس لمعظم الكواكب الأخرى!',
+            en: 'Venus also spins backwards compared to almost all other planets in our Solar System!',
+            zh: '而且金星的自转方向与太阳系绝大多数行星相反！',
+            ja: 'さらに金星は他のほとんどの惑星とは逆向きに自転しています！',
+            tr: 'Ayrıca Venüs, diğer gezegenlerin çoğunun aksine ters yönde döner!',
+            es: '¡Además, Venus gira en sentido contrario a la mayoría de los planetas!'
+          }
+        },
+        {
+          id: 'fg_a1', cat: 'general', age: 'adults', diff: 'hard', emoji: '🌌',
+          title: {
+            ar: 'نحن ننظر إلى الماضي كلما نظرنا إلى النجوم',
+            en: 'Looking at the Stars is Looking Back in Time',
+            zh: '仰望星空即是在回望过去',
+            ja: '星を見上げることは過去を見ること',
+            tr: 'Yıldızlara Bakmak Geçmişe Bakmaktır',
+            es: 'Mirar las estrellas es mirar al pasado'
+          },
+          body: {
+            ar: 'يسافر الضوء بسرعة 300,000 كم/ثانية، ومع ذلك يستغرق ضوء أقرب نجم إلينا بعد الشمس (بروكسيما سنتوري) أكثر من 4.2 سنوات ليصل إلى أعيننا، لذا فنحن نراه كما كان قبل 4 سنوات.',
+            en: 'Light travels at 300,000 km/s, yet light from Proxima Centauri takes 4.24 years to reach Earth—meaning we observe distant galaxies millions of years in the past.',
+            zh: '光速高达每秒30万公里，但离太阳最近的恒星比邻星发出的光仍需4.24年才能到达地球——我们看到的永远是它的过去。',
+            ja: '光は秒速30万kmで進みますが、最も近い恒星プロキシマ・ケンタウリの光でさえ地球に届くまで4.24年かかります。',
+            tr: 'Işık saniyede 300.000 km hızla hareket etse de, en yakın yıldız Proxima Centauri’nin ışığı bize 4.24 yılda ulaşır.',
+            es: 'La luz viaja a 300.000 km/s, pero la de Próxima Centauri tarda 4,24 años en llegar: vemos el universo en el pasado.'
+          },
+          bonus: {
+            ar: 'يرصد تلسكوب جيمس ويب الفضائي مجرات تشكّلت بعد الانفجار العظيم بـ 300 مليون سنة فقط.',
+            en: 'The James Webb Space Telescope captures light emitted over 13.4 billion years ago.',
+            zh: '詹姆斯·韦伯太空望远镜甚至能捕捉到134亿年前发出的古老星光。',
+            ja: 'ジェイムズ・ウェッブ宇宙望遠鏡は134億年以上前の光をとらえています。',
+            tr: 'James Webb Uzay Teleskobu 13.4 milyar yıl önce yayılan ışıkları gözlemleyebiliyor.',
+            es: 'El telescopio James Webb capta luz emitida hace más de 13.400 millones de años.'
+          }
+        }
+      ]
+    };
+
+    // =========================================================================
+    // 4. BULLETPROOF SPLASH MORPHING & TRANSITION (ZERO FREEZE GUARANTEE)
+    // =========================================================================
+    function dismissSplash() {
+      if (state.splashDismissed) return;
+      state.splashDismissed = true;
+
+      const splash = document.getElementById('splash-screen');
+      const appShell = document.getElementById('app-shell');
+      if (appShell) appShell.classList.remove('hidden');
+      showScreen('screen-language');
+
+      if (splash) {
+        splash.style.opacity = '0';
+        splash.style.pointerEvents = 'none';
+        setTimeout(() => {
+          splash.classList.add('hidden');
+        }, 450);
+      }
+    }
+
+    function startAppBoot() {
+      try { initBackgroundCanvas(); } catch (e) {}
+      try { applyLanguageUI('ar'); } catch (e) {}
+      try { selectDifficulty('progressive'); } catch (e) {}
+
+      // Step 1: Morph A+ Logo into Crescent Moon & Star after 950ms
+      setTimeout(() => {
+        const aplus = document.getElementById('logo-aplus');
+        const crescent = document.getElementById('logo-crescent');
+        const ring = document.getElementById('splash-ring');
+
+        if (aplus) {
+          aplus.style.opacity = '0';
+          aplus.style.transform = 'scale(1.35) rotate(65deg)';
+        }
+        if (crescent) {
+          crescent.style.opacity = '1';
+          crescent.style.transform = 'scale(1) rotate(0deg)';
+        }
+        if (ring) {
+          ring.style.transition = 'all 1s ease';
+          ring.style.stroke = '#38bdf8';
+          ring.style.transform = 'rotate(90deg)';
+          ring.style.transformOrigin = '120px 120px';
+        }
+      }, 950);
+
+      // Step 2: Guaranteed automatic transition to Language Screen after 2.6s
+      setTimeout(dismissSplash, 2600);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startAppBoot);
+    } else {
+      startAppBoot();
+    }
+
+    // =========================================================================
+    // 5. NAVIGATION & SCREEN SWITCHER
+    // =========================================================================
+    function showScreen(screenId) {
+      const screens = [
+        'screen-language',
+        'screen-age',
+        'screen-mode',
+        'screen-category',
+        'screen-quiz',
+        'screen-facts'
+      ];
+      screens.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('fade-slide-up');
+        }
+      });
+
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.remove('hidden');
+        void target.offsetWidth;
+        target.classList.add('fade-slide-up');
+      }
+    }
+
+    function goHome() {
+      if (!state.lang) return showScreen('screen-language');
+      if (!state.ageGroup) return showScreen('screen-age');
+      showScreen('screen-mode');
+    }
+
+    // =========================================================================
+    // 6. LANGUAGE SELECTION & DYNAMIC UI TRANSLATION
+    // =========================================================================
+    function selectLanguage(langCode) {
+      state.lang = langCode;
+      playStageSound('tap');
+      applyLanguageUI(langCode);
+      if (!state.ageGroup) {
+        showScreen('screen-age');
+      } else {
+        showScreen('screen-mode');
+      }
+    }
+
+    function applyLanguageUI(langCode) {
+      const dict = I18N[langCode] || I18N.ar;
+      document.documentElement.lang = langCode;
+      document.documentElement.dir = dict.dir;
+
+      const flagEl = document.getElementById('current-lang-flag');
+      const codeEl = document.getElementById('current-lang-code');
+      if (flagEl) flagEl.textContent = dict.flag;
+      if (codeEl) codeEl.textContent = dict.code;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
+      });
+
+      updateHeaderAgeBadge();
+      updateStatusPill();
+      updateStageUI();
+    }
+
+    // =========================================================================
+    // 7. AGE GROUP SELECTION & THEME ENGINE (<18 CARTOON vs 18+ ANIME)
+    // =========================================================================
+    function updateHeaderAgeBadge() {
+      const badge = document.getElementById('header-age-badge');
+      if (!badge) return;
+      const dict = I18N[state.lang] || I18N.ar;
+      if (!state.ageGroup) {
+        badge.textContent = 'A+ Smart Trivia';
+      } else {
+        badge.textContent = state.ageGroup === 'kids' ? dict.badgeKids : dict.badgeAdults;
+      }
+    }
+
+    function applyExactAge() {
+      const input = document.getElementById('exact-age-input');
+      const val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 3 || val > 120) {
+        input.classList.add('border-rose-500');
+        setTimeout(() => input.classList.remove('border-rose-500'), 1000);
+        return;
+      }
+      state.exactAge = val;
+      selectAgeGroup(val < 18 ? 'kids' : 'adults');
+    }
+
+    function selectAgeGroup(group) {
+      try {
+        state.ageGroup = group;
+        playStageSound('tap');
+        const body = document.body;
+        const banner = document.getElementById('theme-visual-banner');
+
+        const modeContainer = document.getElementById('mode-container');
+        const catContainer = document.getElementById('category-container');
+        const quizWrapper = document.getElementById('quiz-card-wrapper');
+        const factsWrapper = document.getElementById('facts-card-wrapper');
+
+        const btnQuiz = document.getElementById('btn-mode-quiz');
+        const btnFacts = document.getElementById('btn-mode-facts');
+        const catBtns = document.querySelectorAll('.cat-btn');
+
+        const containers = [modeContainer, catContainer, quizWrapper, factsWrapper].filter(Boolean);
+
+        if (group === 'kids') {
+          body.className = 'theme-kids selection:bg-yellow-300 selection:text-indigo-950';
+          containers.forEach(el => {
+            el.className = 'kids-card p-6 sm:p-8 transition-all';
+          });
+
+          if (btnQuiz) {
+            btnQuiz.className = 'kids-btn p-6 rounded-3xl text-start bg-gradient-to-br from-amber-300 to-yellow-400 text-indigo-950 border-4 border-amber-500 shadow-lg flex flex-col justify-between min-h-[175px]';
+          }
+          if (btnFacts) {
+            btnFacts.className = 'kids-btn p-6 rounded-3xl text-start bg-gradient-to-br from-sky-300 to-cyan-400 text-indigo-950 border-4 border-sky-500 shadow-lg flex flex-col justify-between min-h-[175px]';
+          }
+
+          catBtns.forEach(b => {
+            b.className = 'cat-btn kids-btn p-4 rounded-2xl bg-indigo-50 hover:bg-yellow-100 text-indigo-950 border-2 border-indigo-200 flex items-center gap-4 text-start transition-all';
+          });
+
+          if (banner) {
+            banner.classList.remove('hidden');
+            banner.innerHTML = `
+              <div class="flex items-center justify-between px-4 py-2.5 rounded-2xl bg-white/90 border-2 border-yellow-300 shadow-md text-indigo-950">
+                <div class="flex items-center gap-3">
+                  <svg viewBox="0 0 80 60" class="w-14 h-11 kids-bounce shrink-0">
+                    <circle cx="40" cy="32" r="22" fill="#38bdf8" stroke="#0284c7" stroke-width="3"/>
+                    <polygon points="40,4 46,16 34,16" fill="#facc15" stroke="#eab308" stroke-width="2"/>
+                    <circle cx="33" cy="29" r="3.5" fill="#1e1b4b"/>
+                    <circle cx="47" cy="29" r="3.5" fill="#1e1b4b"/>
+                    <circle cx="34" cy="28" r="1.2" fill="#fff"/>
+                    <circle cx="48" cy="28" r="1.2" fill="#fff"/>
+                    <path d="M 32 38 Q 40 46 48 38" fill="none" stroke="#1e1b4b" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="25" cy="34" r="3" fill="#f472b6" opacity="0.8"/>
+                    <circle cx="55" cy="34" r="3" fill="#f472b6" opacity="0.8"/>
+                  </svg>
+                  <div>
+                    <span class="text-xs font-black uppercase tracking-wider text-pink-600 block">Cartoon Kids & Youth Zone</span>
+                    <span class="text-xs font-bold text-indigo-900 opacity-85">${(I18N[state.lang] || I18N.ar).badgeKids}</span>
+                  </div>
+                </div>
+                <span class="text-2xl kids-wobble">🌈</span>
+              </div>
+            `;
+          }
+        } else {
+          body.className = 'theme-anime selection:bg-rose-500 selection:text-white';
+          containers.forEach(el => {
+            el.className = 'anime-card p-6 sm:p-8 transition-all';
+          });
+
+          if (btnQuiz) {
+            btnQuiz.className = 'p-6 rounded-3xl text-start bg-gradient-to-br from-rose-950/80 via-slate-900 to-indigo-950/90 text-white border border-rose-500/50 hover:border-rose-400 shadow-xl flex flex-col justify-between min-h-[175px] transition-all hover:scale-[1.02]';
+          }
+          if (btnFacts) {
+            btnFacts.className = 'p-6 rounded-3xl text-start bg-gradient-to-br from-cyan-950/80 via-slate-900 to-indigo-950/90 text-white border border-cyan-500/50 hover:border-cyan-400 shadow-xl flex flex-col justify-between min-h-[175px] transition-all hover:scale-[1.02]';
+          }
+
+          catBtns.forEach(b => {
+            b.className = 'cat-btn p-4 rounded-2xl bg-slate-800/75 hover:bg-rose-950/50 text-white border border-slate-700 hover:border-rose-500/60 flex items-center gap-4 text-start transition-all hover:scale-[1.02]';
+          });
+
+          if (banner) {
+            banner.classList.remove('hidden');
+            banner.innerHTML = `
+              <div class="relative overflow-hidden flex items-center justify-between px-4 py-2.5 rounded-2xl bg-gradient-to-r from-slate-900/95 via-indigo-950/90 to-rose-950/90 border border-rose-500/40 shadow-lg anime-aura">
+                <div class="flex items-center gap-3 z-10">
+                  <svg viewBox="0 0 110 75" class="w-20 h-14 shrink-0">
+                    <defs>
+                      <linearGradient id="cyberHair" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#38bdf8"/>
+                        <stop offset="50%" stop-color="#818cf8"/>
+                        <stop offset="100%" stop-color="#f43f5e"/>
+                      </linearGradient>
+                      <linearGradient id="slashGlow" x1="0" y1="1" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#f43f5e" stop-opacity="0"/>
+                        <stop offset="50%" stop-color="#fbbf24" stop-opacity="1"/>
+                        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.9"/>
+                      </linearGradient>
+                    </defs>
+                    <circle cx="72" cy="26" r="18" fill="#f43f5e" opacity="0.22"/>
+                    <path d="M 8 65 Q 55 10 104 14" fill="none" stroke="url(#slashGlow)" stroke-width="3" stroke-linecap="round" class="anime-slash"/>
+                    <g class="anime-hair">
+                      <path d="M 35 28 C 25 22, 22 42, 18 54 C 28 50, 32 45, 36 42 Z" fill="url(#cyberHair)"/>
+                      <path d="M 55 26 C 68 24, 72 40, 76 52 C 66 48, 60 44, 56 40 Z" fill="url(#cyberHair)"/>
+                      <polygon points="34,26 42,10 47,20 54,8 58,22 66,16 60,30 34,30" fill="url(#cyberHair)"/>
+                    </g>
+                    <path d="M 38 28 L 38 40 L 47 47 L 56 40 L 56 28 Z" fill="#fde68a"/>
+                    <polygon points="40,34 45,33 44,36 40,36" fill="#f43f5e"/>
+                    <polygon points="54,34 49,33 50,36 54,36" fill="#38bdf8"/>
+                    <path d="M 28 72 L 35 48 L 47 54 L 59 48 L 66 72 Z" fill="#0f172a" stroke="#f43f5e" stroke-width="1.5"/>
+                  </svg>
+                  <div>
+                    <span class="text-[11px] font-black uppercase tracking-widest text-rose-400 block">A+ ANIME ARCHIVE • 18+</span>
+                    <span class="text-xs font-bold text-slate-200">${(I18N[state.lang] || I18N.ar).badgeAdults}</span>
+                  </div>
+                </div>
+                <div class="text-end z-10">
+                  <span class="text-xs font-black px-2.5 py-1 rounded-lg bg-rose-500/20 border border-rose-400/40 text-rose-200">PRO</span>
+                </div>
+              </div>
+            `;
+          }
+        }
+      } catch (err) {
+        console.error('Age theme error:', err);
+      }
+
+      updateHeaderAgeBadge();
+      showScreen('screen-mode');
+    }
+
+    // =========================================================================
+    // 8. WEB AUDIO SOUND SYNTHESIZER & DIFFICULTY STAGES (سهل -> متوسط -> صعب)
+    // =========================================================================
+    function toggleSound() {
+      state.soundEnabled = !state.soundEnabled;
+      const btn = document.getElementById('sound-toggle-btn');
+      if (btn) btn.textContent = state.soundEnabled ? '🔊' : '🔇';
+    }
+
+    function playStageSound(type) {
+      if (!state.soundEnabled) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        const notes = type === 'stageup'
+          ? [523.25, 659.25, 783.99, 1046.5]
+          : type === 'correct'
+            ? [587.33, 880]
+            : type === 'wrong'
+              ? [240, 190]
+              : [520];
+
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = type === 'wrong' ? 'sawtooth' : 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+          gain.gain.setValueAtTime(0.09, now + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.24);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.08);
+          osc.stop(now + idx * 0.08 + 0.26);
+        });
+      } catch (e) {}
+    }
+
+    function selectDifficulty(diffChoice) {
+      state.difficultyMode = diffChoice;
+      state.stageProgress = 0;
+      if (diffChoice === 'progressive' || diffChoice === 'easy') {
+        state.currentDifficulty = 'easy';
+      } else if (diffChoice === 'medium') {
+        state.currentDifficulty = 'medium';
+      } else {
+        state.currentDifficulty = 'hard';
+      }
+
+      ['progressive', 'easy', 'medium', 'hard'].forEach(key => {
+        const btn = document.getElementById(`diff-btn-${key}`);
+        if (!btn) return;
+        if (key === diffChoice) {
+          btn.classList.add('border-amber-400', 'bg-amber-400/20', 'scale-[1.03]', 'shadow-md');
+          btn.classList.remove('border-white/15', 'opacity-70');
+        } else {
+          btn.classList.remove('border-amber-400', 'bg-amber-400/20', 'scale-[1.03]', 'shadow-md');
+          btn.classList.add('border-white/15', 'opacity-70');
+        }
+      });
+
+      const multBadge = document.getElementById('diff-multiplier-badge');
+      if (multBadge) {
+        const multMap = { progressive: '1x ➔ 3x ⭐', easy: '1x ⭐', medium: '2x ⭐', hard: '3x ⭐' };
+        multBadge.textContent = multMap[diffChoice] || '1x ⭐';
+      }
+
+      updateStageUI();
+    }
+
+    function jumpToStage(targetDiff) {
+      state.currentDifficulty = targetDiff;
+      state.stageProgress = 0;
+      playStageSound('tap');
+      updateStageUI();
+      if (state.mode === 'quiz' && !document.getElementById('screen-quiz').classList.contains('hidden')) {
+        loadNextQuestion();
+      } else if (state.mode === 'facts' && !document.getElementById('screen-facts').classList.contains('hidden')) {
+        loadNextFact();
+      }
+    }
+
+    function advanceStageProgress(isQuiz) {
+      if (state.difficultyMode !== 'progressive') return;
+      state.stageProgress += 1;
+
+      if (state.stageProgress >= 3) {
+        const dict = I18N[state.lang] || I18N.ar;
+        if (state.currentDifficulty === 'easy') {
+          state.currentDifficulty = 'medium';
+          state.stageProgress = 0;
+          triggerStageUpCelebration(isQuiz, `${dict.stageUpMsg} ${dict.diffMedium} ⚡`);
+        } else if (state.currentDifficulty === 'medium') {
+          state.currentDifficulty = 'hard';
+          state.stageProgress = 0;
+          triggerStageUpCelebration(isQuiz, `${dict.stageUpMsg} ${dict.diffHard} 🔥`);
+        } else {
+          state.stageProgress = 3;
+        }
+      }
+      updateStageUI();
+    }
+
+    function triggerStageUpCelebration(isQuiz, msg) {
+      playStageSound('stageup');
+      const bannerId = isQuiz ? 'quiz-stage-up-banner' : 'facts-stage-up-banner';
+      const textId = isQuiz ? 'quiz-stage-up-text' : 'facts-stage-up-text';
+      const banner = document.getElementById(bannerId);
+      const textEl = document.getElementById(textId);
+      if (banner && textEl) {
+        textEl.textContent = msg;
+        banner.classList.remove('hidden');
+        setTimeout(() => banner.classList.add('hidden'), 3600);
+      }
+    }
+
+    function updateStageUI() {
+      const dict = I18N[state.lang] || I18N.ar;
+      const diff = state.currentDifficulty;
+      const labelMap = {
+        easy: `🌱 ${dict.diffEasy}`,
+        medium: `⚡ ${dict.diffMedium}`,
+        hard: `🔥 ${dict.diffHard}`
+      };
+
+      ['q', 'f'].forEach(prefix => {
+        const labelEl = document.getElementById(prefix === 'q' ? 'quiz-stage-label' : 'facts-stage-label');
+        const progEl = document.getElementById(prefix === 'q' ? 'quiz-stage-progress-text' : 'facts-stage-progress-text');
+        if (labelEl) labelEl.textContent = labelMap[diff];
+
+        if (progEl) {
+          if (state.difficultyMode === 'progressive') {
+            progEl.textContent = diff === 'hard' && state.stageProgress >= 3
+              ? 'MAX 🔥'
+              : `${state.stageProgress} / 3`;
+          } else {
+            const mult = diff === 'easy' ? '1x ⭐' : diff === 'medium' ? '2x ⭐' : '3x ⭐';
+            progEl.textContent = mult;
+          }
+        }
+
+        const s1 = document.getElementById(`${prefix}-step-1`);
+        const s2 = document.getElementById(`${prefix}-step-2`);
+        const s3 = document.getElementById(`${prefix}-step-3`);
+        if (s1 && s2 && s3) {
+          s1.className = 'h-2.5 rounded-full bg-emerald-400 shadow-sm transition-all';
+          s2.className = (diff === 'medium' || diff === 'hard')
+            ? 'h-2.5 rounded-full bg-amber-400 shadow-sm transition-all'
+            : 'h-2.5 rounded-full bg-white/15 transition-all';
+          s3.className = (diff === 'hard')
+            ? 'h-2.5 rounded-full bg-rose-500 shadow-sm transition-all'
+            : 'h-2.5 rounded-full bg-white/15 transition-all';
+        }
+
+        ['easy', 'medium', 'hard'].forEach(lvl => {
+          const jBtn = document.getElementById(`${prefix}-jump-${lvl}`);
+          if (!jBtn) return;
+          if (lvl === diff) {
+            jBtn.className = 'flex-1 py-1 rounded-lg text-[11px] font-black bg-amber-400 text-slate-950 shadow transition-all';
+          } else {
+            jBtn.className = 'flex-1 py-1 rounded-lg text-[11px] font-bold bg-white/10 hover:bg-white/20 opacity-80 transition-all';
+          }
+        });
+      });
+    }
+
+    function selectMode(mode) {
+      state.mode = mode;
+      playStageSound('tap');
+      const dict = I18N[state.lang] || I18N.ar;
+      const pill = document.getElementById('selected-mode-pill');
+      if (pill) {
+        pill.textContent = mode === 'quiz' ? `❓ ${dict.quizModeTitle}` : `💡 ${dict.factsModeTitle}`;
+      }
+      showScreen('screen-category');
+    }
+
+    function startSession(category) {
+      state.category = category;
+      state.stageProgress = 0;
+      playStageSound('tap');
+      if (state.difficultyMode === 'progressive') {
+        state.currentDifficulty = 'easy';
+      }
+      updateStageUI();
+      if (state.mode === 'quiz') {
+        showScreen('screen-quiz');
+        loadNextQuestion();
+      } else {
+        showScreen('screen-facts');
+        loadNextFact();
+      }
+    }
+
+    function getCategoryLabel(cat) {
+      const dict = I18N[state.lang] || I18N.ar;
+      const map = {
+        religion: `🕌 ${dict.catReligion}`,
+        football: `⚽ ${dict.catFootball}`,
+        animals: `🦁 ${dict.catAnimals}`,
+        general: `🌍 ${dict.catGeneral}`,
+        random: `🎲 ${dict.catRandom}`
+      };
+      return map[cat] || cat;
+    }
+
+    // =========================================================================
+    // 9. HYBRID AI (GEMINI API) + OFFLINE FALLBACK ENGINE
+    // =========================================================================
+    function toggleForceOffline() {
+      state.forceOffline = !state.forceOffline;
+      updateStatusPill();
+    }
+
+    function updateStatusPill() {
+      const btn = document.getElementById('ai-status-btn');
+      const dot = document.getElementById('status-dot');
+      const txt = document.getElementById('status-text');
+      const dict = I18N[state.lang] || I18N.ar;
+      if (!btn || !dot || !txt) return;
+
+      const isOffline = state.forceOffline || !navigator.onLine;
+      if (isOffline) {
+        btn.className = 'flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-amber-500/20 border-amber-400/50 text-amber-200';
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+        txt.textContent = dict.statusOffline;
+      } else {
+        btn.className = 'flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-emerald-500/20 border-emerald-400/40 text-emerald-200';
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+        txt.textContent = dict.statusAI;
+      }
+    }
+
+    window.addEventListener('online', updateStatusPill);
+    window.addEventListener('offline', updateStatusPill);
+
+    async function fetchGeminiJSON(promptText, schemaObj) {
+      if (state.forceOffline || !navigator.onLine) {
+        throw new Error('Offline mode active');
+      }
+
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      const payload = {
+        contents: [{ parts: [{ text: promptText }] }],
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: schemaObj,
+          temperature: 0.85
+        }
+      };
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8500);
+
+      try {
+        const res = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!rawText) throw new Error('Empty AI response');
+        return JSON.parse(rawText);
+      } catch (err) {
+        clearTimeout(timeoutId);
+        throw err;
+      }
+    }
+
+    function getOfflineFallbackItem(type) {
+      const targetDiff = state.currentDifficulty;
+      let pool = OFFLINE_BANK[type].filter(item => {
+        const ageMatch = item.age === state.ageGroup;
+        const catMatch = state.category === 'random' || item.cat === state.category;
+        const diffMatch = item.diff === targetDiff;
+        return ageMatch && catMatch && diffMatch;
+      });
+
+      if (pool.length === 0) {
+        pool = OFFLINE_BANK[type].filter(item => {
+          const catMatch = state.category === 'random' || item.cat === state.category;
+          return catMatch && item.diff === targetDiff;
+        });
+      }
+
+      if (pool.length === 0) {
+        pool = OFFLINE_BANK[type].filter(item => {
+          const ageMatch = item.age === state.ageGroup;
+          const catMatch = state.category === 'random' || item.cat === state.category;
+          return ageMatch && catMatch;
+        });
+      }
+
+      const finalPool = pool.length > 0 ? pool : OFFLINE_BANK[type];
+      let unvisited = finalPool.filter(i => !state.usedOfflineIds.has(i.id));
+      if (unvisited.length === 0) {
+        finalPool.forEach(i => state.usedOfflineIds.delete(i.id));
+        unvisited = finalPool;
+      }
+      const chosen = unvisited[Math.floor(Math.random() * unvisited.length)];
+      state.usedOfflineIds.add(chosen.id);
+      return chosen;
+    }
+
+    // =========================================================================
+    // 10. QUIZ FLOW (LOAD, RENDER, ANSWER CHECK)
+    // =========================================================================
+    async function loadNextQuestion() {
+      state.answered = false;
+      const loader = document.getElementById('quiz-loader');
+      const content = document.getElementById('quiz-content');
+      const feedback = document.getElementById('quiz-feedback');
+      const nextBtn = document.getElementById('next-question-btn');
+
+      document.getElementById('quiz-cat-badge').textContent = getCategoryLabel(state.category);
+      updateStageUI();
+      feedback.classList.add('hidden');
+      nextBtn.classList.add('hidden');
+      content.classList.add('hidden');
+      loader.classList.remove('hidden');
+
+      const langName = I18N[state.lang].name;
+      const ageDesc = state.ageGroup === 'kids'
+        ? `Kids and youth under 18 years old${state.exactAge ? ` (specifically age ${state.exactAge})` : ''} — keep it fun, educational, encouraging, and age-appropriate.`
+        : `Adults 18 and older${state.exactAge ? ` (specifically age ${state.exactAge})` : ''} — make it intellectually engaging, nuanced, and challenging.`;
+
+      const diffGuidelines = {
+        easy: 'STAGE 1 — EASY (Beginner): Clear, foundational, accessible question that builds confidence.',
+        medium: 'STAGE 2 — MEDIUM (Intermediate): Requires solid general knowledge, analytical thinking, or specific details.',
+        hard: 'STAGE 3 — HARD (Expert / Master): Deep, tricky, advanced specialist-level question that truly tests mastery.'
+      };
+
+      const actualCat = state.category === 'random'
+        ? ['religion', 'football', 'animals', 'general'][Math.floor(Math.random() * 4)]
+        : state.category;
+
+      const prompt = `Generate 1 unique multiple-choice trivia question in ${langName} (${state.lang}).
+Target Audience: ${ageDesc}
+Difficulty Stage: ${diffGuidelines[state.currentDifficulty]}
+Category: ${actualCat} (religion = respectful Islamic/spiritual values & history; football = world soccer; animals = wildlife biology; general = science/space/history).
+Provide 4 distinct options, the 0-based index of the correct option, and a clear, engaging explanation.`;
+
+      const schema = {
+        type: "OBJECT",
+        properties: {
+          question: { type: "STRING" },
+          options: { type: "ARRAY", items: { type: "STRING" } },
+          correctIndex: { type: "INTEGER" },
+          explanation: { type: "STRING" }
+        },
+        required: ["question", "options", "correctIndex", "explanation"]
+      };
+
+      try {
+        const aiData = await fetchGeminiJSON(prompt, schema);
+        if (!aiData.options || aiData.options.length < 2) throw new Error('Invalid options');
+        renderQuestion({
+          question: aiData.question,
+          options: aiData.options.slice(0, 4),
+          correctIndex: Math.min(Math.max(0, aiData.correctIndex), 3),
+          explanation: aiData.explanation,
+          source: '✨ Gemini AI'
+        });
+      } catch (e) {
+        const off = getOfflineFallbackItem('quiz');
+        const l = state.lang;
+        renderQuestion({
+          question: off.q[l] || off.q.en,
+          options: off.opts[l] || off.opts.en,
+          correctIndex: off.ans,
+          explanation: off.exp[l] || off.exp.en,
+          source: `📦 ${I18N[l].statusOffline}`
+        });
+      } finally {
+        loader.classList.add('hidden');
+        content.classList.remove('hidden');
+      }
+    }
+
+    function renderQuestion(qObj) {
+      state.currentQuestion = qObj;
+      document.getElementById('quiz-source-tag').textContent = qObj.source;
+      document.getElementById('quiz-question-text').textContent = qObj.question;
+
+      const optionsBox = document.getElementById('quiz-options');
+      optionsBox.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      qObj.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const baseStyle = state.ageGroup === 'kids'
+          ? 'w-full p-4 rounded-2xl border-2 border-indigo-200 bg-white hover:bg-yellow-50 text-indigo-950 font-extrabold text-start flex items-center gap-3 shadow-sm transition-all'
+          : 'w-full p-4 rounded-2xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700/80 text-white font-bold text-start flex items-center gap-3 transition-all';
+
+        btn.className = baseStyle;
+        btn.innerHTML = `
+          <span class="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 font-black flex items-center justify-center shrink-0 text-sm">${letters[idx]}</span>
+          <span class="flex-1 text-sm sm:text-base">${optText}</span>
+        `;
+        btn.onclick = () => handleAnswer(idx);
+        optionsBox.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(selectedIdx) {
+      if (state.answered) return;
+      state.answered = true;
+
+      const qObj = state.currentQuestion;
+      const isCorrect = selectedIdx === qObj.correctIndex;
+      const allBtns = document.getElementById('quiz-options').querySelectorAll('button');
+      const dict = I18N[state.lang] || I18N.ar;
+
+      allBtns.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === qObj.correctIndex) {
+          btn.className = state.ageGroup === 'kids'
+            ? 'w-full p-4 rounded-2xl border-4 border-emerald-500 bg-emerald-100 text-emerald-950 font-black text-start flex items-center gap-3 shadow-md'
+            : 'w-full p-4 rounded-2xl border-2 border-emerald-400 bg-emerald-500/25 text-emerald-100 font-black text-start flex items-center gap-3 shadow-md';
+        } else if (i === selectedIdx && !isCorrect) {
+          btn.className = state.ageGroup === 'kids'
+            ? 'w-full p-4 rounded-2xl border-4 border-rose-500 bg-rose-100 text-rose-950 font-bold text-start flex items-center gap-3'
+            : 'w-full p-4 rounded-2xl border-2 border-rose-500 bg-rose-500/25 text-rose-100 font-bold text-start flex items-center gap-3 opacity-90';
+        } else {
+          btn.classList.add('opacity-50');
+        }
+      });
+
+      if (isCorrect) {
+        const mult = state.currentDifficulty === 'easy' ? 1 : state.currentDifficulty === 'medium' ? 2 : 3;
+        state.score += 10 * mult;
+        state.streak += 1;
+        playStageSound('correct');
+        advanceStageProgress(true);
+      } else {
+        state.streak = 0;
+        playStageSound('wrong');
+      }
+
+      document.getElementById('quiz-score').textContent = state.score;
+      document.getElementById('quiz-streak').textContent = state.streak;
+
+      const feedback = document.getElementById('quiz-feedback');
+      const fTitle = document.getElementById('quiz-feedback-title');
+      const fExp = document.getElementById('quiz-feedback-exp');
+
+      feedback.classList.remove('hidden');
+      if (isCorrect) {
+        feedback.className = state.ageGroup === 'kids'
+          ? 'mt-5 p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 text-emerald-950'
+          : 'mt-5 p-4 rounded-2xl border border-emerald-400/50 bg-emerald-950/50 text-emerald-100';
+        fTitle.textContent = dict.correctTitle;
+      } else {
+        feedback.className = state.ageGroup === 'kids'
+          ? 'mt-5 p-4 rounded-2xl border-2 border-rose-500 bg-rose-50 text-rose-950'
+          : 'mt-5 p-4 rounded-2xl border border-rose-400/50 bg-rose-950/50 text-rose-100';
+        fTitle.textContent = dict.wrongTitle;
+      }
+      fExp.textContent = qObj.explanation;
+
+      document.getElementById('next-question-btn').classList.remove('hidden');
+    }
+
+    // =========================================================================
+    // 11. FACTS / INFORMATION FLOW
+    // =========================================================================
+    async function loadNextFact() {
+      const loader = document.getElementById('facts-loader');
+      const content = document.getElementById('facts-content');
+
+      document.getElementById('facts-cat-badge').textContent = getCategoryLabel(state.category);
+      updateStageUI();
+      content.classList.add('hidden');
+      loader.classList.remove('hidden');
+
+      const langName = I18N[state.lang].name;
+      const ageDesc = state.ageGroup === 'kids'
+        ? `Kids and youth under 18 years old${state.exactAge ? ` (age ${state.exactAge})` : ''} — fun, wonder-filled, easy to grasp, and inspiring.`
+        : `Adults 18 and older${state.exactAge ? ` (age ${state.exactAge})` : ''} — deep, fascinating, scientifically or historically rich.`;
+
+      const diffFactGuidelines = {
+        easy: 'STAGE 1 — EASY: Accessible, charming, and easy-to-remember everyday wonder.',
+        medium: 'STAGE 2 — MEDIUM: Intriguing behind-the-scenes mechanism, historical nuance, or surprising connection.',
+        hard: 'STAGE 3 — HARD (Expert): Deep scientific, historical, or technical insight rarely known by the general public.'
+      };
+
+      const actualCat = state.category === 'random'
+        ? ['religion', 'football', 'animals', 'general'][Math.floor(Math.random() * 4)]
+        : state.category;
+
+      const prompt = `Share 1 extraordinary, accurate fact in ${langName} (${state.lang}).
+Target Audience: ${ageDesc}
+Depth Level: ${diffFactGuidelines[state.currentDifficulty]}
+Category: ${actualCat}
+Return a short catchy title, a clear 2-3 sentence explanation, a single relevant emoji, and a 1-sentence bonus takeaway.`;
+
+      const schema = {
+        type: "OBJECT",
+        properties: {
+          emoji: { type: "STRING" },
+          title: { type: "STRING" },
+          body: { type: "STRING" },
+          bonus: { type: "STRING" }
+        },
+        required: ["emoji", "title", "body", "bonus"]
+      };
+
+      try {
+        const aiFact = await fetchGeminiJSON(prompt, schema);
+        state.factCount += 1;
+        advanceStageProgress(false);
+        renderFact({
+          emoji: aiFact.emoji || '✨',
+          title: aiFact.title,
+          body: aiFact.body,
+          bonus: aiFact.bonus,
+          source: '✨ Gemini AI'
+        });
+      } catch (e) {
+        const off = getOfflineFallbackItem('facts');
+        const l = state.lang;
+        state.factCount += 1;
+        advanceStageProgress(false);
+        renderFact({
+          emoji: off.emoji,
+          title: off.title[l] || off.title.en,
+          body: off.body[l] || off.body.en,
+          bonus: off.bonus[l] || off.bonus.en,
+          source: `📦 ${I18N[l].statusOffline}`
+        });
+      } finally {
+        loader.classList.add('hidden');
+        content.classList.remove('hidden');
+      }
+    }
+
+    function renderFact(fObj) {
+      document.getElementById('facts-counter').textContent = state.factCount;
+      document.getElementById('fact-source-tag').textContent = fObj.source;
+      document.getElementById('fact-emoji-box').textContent = fObj.emoji;
+      document.getElementById('fact-title').textContent = fObj.title;
+      document.getElementById('fact-body').textContent = fObj.body;
+      document.getElementById('fact-bonus').textContent = fObj.bonus;
+    }
+
+    // =========================================================================
+    // 12. ADAPTIVE BACKGROUND PARTICLE ANIMATION CANVAS
+    // =========================================================================
+    function initBackgroundCanvas() {
+      const canvas = document.getElementById('bg-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const particles = Array.from({ length: 30 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: 4 + Math.random() * 9,
+        speedX: (Math.random() - 0.5) * 1.1,
+        speedY: 0.4 + Math.random() * 1.2,
+        rot: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.04
+      }));
+
+      function drawStar(cx, cy, spikes, outerR, innerR, color) {
+        let rot = Math.PI / 2 * 3;
+        let step = Math.PI / spikes;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - outerR);
+        for (let i = 0; i < spikes; i++) {
+          ctx.lineTo(cx + Math.cos(rot) * outerR, cy + Math.sin(rot) * outerR);
+          rot += step;
+          ctx.lineTo(cx + Math.cos(rot) * innerR, cy + Math.sin(rot) * innerR);
+          rot += step;
+        }
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+
+        particles.forEach(p => {
+          p.rot += p.rotSpeed;
+          if (state.ageGroup === 'kids') {
+            p.y -= p.speedY * 0.85;
+            p.x += Math.sin(p.rot) * 0.7;
+            if (p.y < -20) { p.y = height + 20; p.x = Math.random() * width; }
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot);
+            drawStar(0, 0, 5, p.size, p.size * 0.48, 'rgba(254, 240, 138, 0.42)');
+            ctx.restore();
+          } else {
+            p.y += p.speedY;
+            p.x += Math.sin(p.rot) * 1.1 + p.speedX;
+            if (p.y > height + 20) { p.y = -20; p.x = Math.random() * width; }
+            if (p.x > width + 20) p.x = -20;
+            if (p.x < -20) p.x = width + 20;
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot);
+            ctx.beginPath();
+            ctx.moveTo(0, -p.size);
+            ctx.bezierCurveTo(p.size, -p.size * 0.5, p.size * 0.8, p.size, 0, p.size * 0.7);
+            ctx.bezierCurveTo(-p.size * 0.8, p.size, -p.size, -p.size * 0.5, 0, -p.size);
+            ctx.fillStyle = p.size > 8.5 ? 'rgba(244, 63, 94, 0.35)' : 'rgba(56, 189, 248, 0.35)';
+            ctx.fill();
+            ctx.restore();
+          }
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+
+    // Global exports
+    window.dismissSplash = dismissSplash;
+    window.showScreen = showScreen;
+    window.goHome = goHome;
+    window.selectLanguage = selectLanguage;
+    window.selectAgeGroup = selectAgeGroup;
+    window.applyExactAge = applyExactAge;
+    window.selectMode = selectMode;
+    window.selectDifficulty = selectDifficulty;
+    window.jumpToStage = jumpToStage;
+    window.startSession = startSession;
+    window.loadNextQuestion = loadNextQuestion;
+    window.loadNextFact = loadNextFact;
+    window.toggleForceOffline = toggleForceOffline;
+    window.toggleSound = toggleSound;
+  </script>
+</body>
+</html>
